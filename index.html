@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rapor Defteri</title>
+<meta name="description" content="Ekibin günlük raporları, tek defterde.">
+<meta name="theme-color" content="#2B4ACB">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Rapor Defteri — açık ve sade arayüz
+   ========================================================= */
+:root {
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --surface-2: #F1F3F6;
+  --ink: #1C2430;
+  --ink-2: #3F4856;
+  --muted: #687182;
+  --line: #E1E5EB;
+  --line-2: #ECEFF3;
+  --accent: #2B4ACB;
+  --accent-ink: #FFFFFF;
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  --ok: #24804F;
+  --ok-soft: #E6F4EC;
+  --plan: #6B4FD8;
+  --plan-soft: #EFEBFC;
+  --star: #C98A12;
+  --danger: #B93A26;
+  --danger-soft: #FBEDEA;
+  --warn-soft: #FFF6E0;
+  --shadow: 0 1px 2px rgba(28, 36, 48, .06), 0 4px 14px rgba(28, 36, 48, .05);
+  --r-s: 6px; --r: 10px; --r-l: 14px;
+  --font: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #11151B;
+  --surface: #181D25;
+  --surface-2: #202631;
+  --ink: #E7EAEF;
+  --ink-2: #C3C9D3;
+  --muted: #949CAA;
+  --line: #2C3340;
+  --line-2: #242A35;
+  --accent: #7C93F5;
+  --accent-ink: #0E1220;
+  --ok: #5CC28A; --ok-soft: #173124;
+  --plan: #A994FF; --plan-soft: #251F3E;
+  --star: #E8B04A;
+  --danger: #F07A64; --danger-soft: #3A1E19;
+  --warn-soft: #33290F;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.grow { flex: 1; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+/* ---------- marka ---------- */
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
+.brand-mark { width: 18px; height: 22px; border-radius: 3px 5px 5px 3px; background: var(--accent); position: relative; flex: 0 0 auto; box-shadow: inset 4px 0 0 rgba(0, 0, 0, .18); }
+.brand-mark::after { content: ""; position: absolute; left: 7px; right: 3px; top: 6px; height: 2px; background: rgba(255, 255, 255, .75); box-shadow: 0 4px 0 rgba(255, 255, 255, .5); border-radius: 1px; }
+.brand-mark.big { width: 30px; height: 38px; }
+.brand-mark.big::after { left: 11px; right: 5px; top: 10px; height: 3px; box-shadow: 0 7px 0 rgba(255, 255, 255, .5); }
+
+/* ---------- düğmeler ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px; padding: 0 16px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--surface); font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.btn:hover:not(:disabled) { border-color: color-mix(in srgb, var(--ink) 25%, var(--line)); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, #000); }
+.btn.ghost { background: transparent; }
+.btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn.sm, .btn.small { min-height: 32px; padding: 0 12px; font-size: 13px; }
+.btn:disabled { opacity: .55; cursor: default; }
+.icon-btn { width: 34px; height: 34px; border: 0; background: transparent; border-radius: var(--r-s); cursor: pointer; color: var(--muted); font-size: 15px; display: inline-grid; place-items: center; flex: 0 0 auto; }
+.icon-btn:hover { background: var(--surface-2); color: var(--ink); }
+.link-btn { border: 0; background: none; padding: 2px 4px; color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 500; border-radius: 4px; }
+.link-btn:hover { color: var(--ink); text-decoration: underline; }
+.link-btn.danger:hover { color: var(--danger); }
+
+/* ---------- form ---------- */
+.input { width: 100%; min-height: 40px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r-s); background: var(--surface); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+.input:disabled { background: var(--surface-2); color: var(--muted); }
+select.input { padding-right: 28px; }
+.input.date { width: auto; }
+.ta { resize: vertical; min-height: 92px; line-height: 1.55; }
+.form { display: grid; gap: 14px; }
+.form.two { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; margin-bottom: 14px; }
+.block > .form + .muted { margin-top: 0; }
+.field { display: grid; gap: 6px; align-content: start; }
+.field > .seg, .field > .swatches { justify-self: start; }
+.field > label, .field > .label { font-weight: 600; font-size: 13.5px; }
+.field small { color: var(--muted); font-size: 12.5px; }
+.form-msg:empty { display: none; }
+.form-msg { font-size: 14px; padding: 9px 12px; border-radius: var(--r-s); }
+.form-msg.err { background: var(--danger-soft); color: var(--danger); }
+.form-msg.ok { background: var(--ok-soft); color: var(--ok); }
+.check { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--accent); }
+.range { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; max-width: 100%; }
+.range .input { width: auto; min-width: 0; flex: 1 1 130px; }
+
+/* parçalı seçim */
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; background: var(--surface-2); border-radius: 8px; }
+.seg.wide { display: flex; }
+.seg.wide .seg-item { flex: 1; }
+.seg-item { border: 0; background: transparent; padding: 6px 12px; border-radius: 6px; font-size: 13.5px; font-weight: 600; color: var(--muted); cursor: pointer; }
+.seg-item:hover { color: var(--ink); }
+.seg-item.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .08); }
+.seg-item.t-hazir.on { color: var(--ok); }
+.seg-item.t-gelecek_hafta.on, .seg-item.n-etkinlik.on { color: var(--plan); }
+
+/* ---------- yerleşim ---------- */
+.app { display: flex; min-height: 100vh; }
+.side { width: 256px; flex: 0 0 256px; background: var(--surface); border-right: 1px solid var(--line); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+.demo-bar ~ .app .side { height: calc(100vh - 38px); top: 38px; }
+.side .brand { padding: 20px 20px 16px; }
+.nav { flex: 1; overflow-y: auto; padding: 4px 10px 10px; display: flex; flex-direction: column; gap: 1px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 7px; text-decoration: none; color: var(--ink-2); font-weight: 500; font-size: 14.5px; }
+.nav-item:hover { background: var(--surface-2); color: var(--ink); }
+.nav-item.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.nav-item.muted { color: var(--muted); font-style: italic; }
+.nav-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-count { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav-group { margin: 16px 10px 6px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.nav-item.person { padding: 6px 10px; }
+.today-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--line); flex: 0 0 auto; }
+.today-dot.on { background: var(--ok); border-color: var(--ok); }
+.side-foot { border-top: 1px solid var(--line); padding: 10px; display: grid; gap: 6px; }
+.me { display: flex; align-items: center; gap: 10px; padding: 6px 4px 2px 10px; }
+.me-text { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+.me-text strong { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.me-text span { font-size: 12.5px; color: var(--muted); }
+.main-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.main { position: relative; flex: 1; padding: 36px 48px 96px; max-width: 980px; width: 100%; }
+.main:focus { outline: none; }
+.topbar { display: none; }
+.scrim { display: none; }
+.demo-bar { position: sticky; top: 0; z-index: 30; min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 6px 16px; background: var(--warn-soft); color: var(--ink); font-size: 13.5px; border-bottom: 1px solid color-mix(in srgb, var(--star) 30%, transparent); }
+
+.avatar { display: inline-grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 700; flex: 0 0 auto; object-fit: cover; letter-spacing: -.02em; }
+
+/* ---------- sayfa başlığı ---------- */
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+.page-head h1 { margin: 0; font-size: 30px; line-height: 1.15; letter-spacing: -.025em; font-weight: 700; }
+.page-head .sub { margin: 6px 0 0; color: var(--muted); }
+.page-actions { display: flex; gap: 8px; align-items: center; }
+.person-head { justify-content: flex-start; align-items: center; }
+.person-head .avatar { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--who); }
+.lede { font-size: 19px; line-height: 1.45; margin: -8px 0 24px; max-width: 60ch; color: var(--ink-2); }
+
+.block { margin-bottom: 40px; }
+.block-title { font-size: 16px; font-weight: 700; margin: 0 0 14px; letter-spacing: -.01em; }
+.block > .muted { margin: -6px 0 16px; max-width: 70ch; }
+.empty { padding: 28px 20px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); text-align: center; }
+.notice { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-radius: var(--r); background: var(--warn-soft); margin-bottom: 20px; font-size: 14.5px; }
+.notice.err { background: var(--danger-soft); color: var(--danger); }
+
+/* ---------- bugün ---------- */
+.who-today { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 40px; }
+.people { display: flex; flex-wrap: wrap; gap: 8px; }
+.person-chip { display: flex; align-items: center; gap: 10px; padding: 7px 14px 7px 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; color: var(--ink); }
+.person-chip:hover { border-color: var(--accent); }
+.person-chip span { display: grid; line-height: 1.25; }
+.person-chip strong { font-size: 14px; }
+.person-chip small { color: var(--muted); font-size: 12.5px; }
+
+.week-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.week { width: 100%; border-collapse: collapse; min-width: 520px; }
+.week th, .week td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--line-2); }
+.week tbody tr:last-child > * { border-bottom: 0; }
+.week thead th { font-size: 13px; font-weight: 600; color: var(--muted); }
+.week thead th small { display: block; font-size: 18px; color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.week thead th.is-today small { color: var(--accent); }
+.week tbody th { text-align: left; font-weight: 500; padding-left: 14px; white-space: nowrap; }
+.week td.is-today { background: var(--accent-soft); }
+.cell { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px dashed var(--line); font-size: 13px; font-weight: 700; color: transparent; }
+.cell.on { border: 0; background: var(--who); color: #fff; }
+.cell.on.done { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ok); }
+td.future .cell { border-style: dotted; opacity: .5; }
+
+.who { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font-weight: 600; }
+.who > div { display: grid; line-height: 1.3; }
+.who small { color: var(--muted); font-weight: 400; font-size: 13px; }
+a.who:hover { color: var(--accent); }
+.who.big strong { font-size: 16px; }
+
+/* ---------- zaman çizgisi ---------- */
+.timeline { display: grid; gap: 30px; }
+.day { display: grid; grid-template-columns: 92px 1fr; gap: 0 20px; }
+.day-head { position: sticky; top: 16px; align-self: start; display: grid; justify-items: start; line-height: 1.1; }
+.demo-bar ~ .app .day-head { top: 54px; }
+.day-num { font-size: 44px; font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--ink); }
+.day-meta { display: grid; gap: 2px; margin-top: 4px; }
+.day-meta strong { font-size: 14px; font-weight: 600; }
+.day-meta span { font-size: 12.5px; color: var(--muted); }
+.day-items { display: grid; gap: 10px; min-width: 0; }
+
+.entry { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 18px 14px 20px; min-width: 0; }
+.entry::before { content: ""; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 4px; border-radius: var(--r) 0 0 var(--r); background: var(--who, var(--line)); }
+.entry.important { border-color: color-mix(in srgb, var(--star) 55%, var(--line)); background: color-mix(in srgb, var(--star) 5%, var(--surface)); }
+.entry-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 26px; margin-bottom: 6px; }
+.entry-head .who { font-size: 14px; }
+.entry-time { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.entry-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.6; max-width: 72ch; }
+.entry-text.clamp { display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.link-btn.more { padding-left: 0; margin-top: 4px; color: var(--accent); }
+.badge { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); }
+.badge.t-hazir { background: var(--ok-soft); color: var(--ok); }
+.badge.t-gelecek_hafta, .badge.n-etkinlik { background: var(--plan-soft); color: var(--plan); }
+.badge.n-toplanti { background: var(--accent-soft); color: var(--accent); }
+.entry.note::before { background: var(--accent); }
+.entry.note.n-etkinlik::before { background: var(--plan); }
+.star { border: 0; background: none; font-size: 18px; line-height: 1; color: color-mix(in srgb, var(--muted) 45%, transparent); cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.star:hover { color: var(--star); }
+.star.on { color: var(--star); }
+.star.static { cursor: default; }
+
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.thumb { position: relative; width: 84px; height: 84px; padding: 0; margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface-2); cursor: zoom-in; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb img.missing { opacity: 0; }
+.thumbs.edit .thumb { cursor: default; }
+.thumbs.edit:empty { display: none; }
+.thumb-x { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .65); color: #fff; font-size: 11px; cursor: pointer; }
+.link-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; text-decoration: none; color: var(--ink-2); max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip::before { content: "↗"; color: var(--accent); }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* filtreler */
+.filters, .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.fchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); padding: 5px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 500; cursor: pointer; color: var(--ink-2); }
+.fchip small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.fchip:hover { border-color: color-mix(in srgb, var(--ink) 30%, var(--line)); }
+.fchip.on { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.fchip.on small { color: color-mix(in srgb, var(--surface) 70%, transparent); }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 28px; padding: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.filter-bar .input { width: auto; min-height: 36px; }
+.filter-bar .search { flex: 1 1 200px; }
+
+/* ---------- yazma alanı ---------- */
+.composer { display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-l); padding: 16px; box-shadow: var(--shadow); }
+.composer.editing { box-shadow: none; border: 0; padding: 0; }
+.composer.drop { border-color: var(--accent); background: var(--accent-soft); }
+.comp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.composer .ta { border-color: var(--line-2); background: var(--bg); }
+.composer .ta:focus { background: var(--surface); }
+.links-edit { display: grid; gap: 6px; }
+.link-row { display: flex; gap: 6px; align-items: center; }
+.link-row .input { min-height: 36px; font-size: 14px; }
+.links-edit:empty { display: none; }
+.comp-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.comp-tools, .comp-save { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hint { font-size: 12.5px; color: var(--muted); }
+
+/* ---------- yapay zekâ ---------- */
+.ai-out { margin-top: 18px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.ai-text { padding: 20px 24px; line-height: 1.65; max-width: 78ch; overflow-wrap: anywhere; }
+.ai-gap { height: .7em; }
+.ai-rule { height: 1px; background: var(--line); margin: 14px 0; }
+.ai-img { max-width: 220px; max-height: 220px; border-radius: 6px; display: block; margin: 8px 0; border: 1px solid var(--line); }
+.ai-actions { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--line-2); }
+.thinking { margin-top: 18px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+.thinking::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.block .row + .ai-out, .block .row ~ div > .ai-out { margin-top: 18px; }
+.block .ta + .row { margin-top: 10px; }
+
+/* ---------- tablo ---------- */
+.table-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); margin-bottom: 14px; }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 13px; font-weight: 600; color: var(--muted); padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.table td { padding: 10px 14px; border-bottom: 1px solid var(--line-2); vertical-align: middle; }
+.table tr:last-child td { border-bottom: 0; }
+.table tr.passive td { opacity: .6; }
+.table .actions { text-align: right; white-space: nowrap; }
+.status { font-size: 13px; font-weight: 600; }
+.status::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; background: currentColor; }
+.status.ok { color: var(--ok); }
+.status.wait { color: var(--star); }
+.status.off { color: var(--muted); }
+.swatches { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.swatch { width: 28px; height: 28px; border-radius: 50%; border: 0; cursor: pointer; position: relative; display: grid; place-items: center; }
+.swatch.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+.swatch.custom { background: var(--surface-2); color: var(--muted); font-weight: 700; overflow: hidden; }
+.swatch.custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.av-edit { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.invite { white-space: pre-wrap; background: var(--surface-2); padding: 14px; border-radius: var(--r-s); font-family: inherit; font-size: 14px; line-height: 1.55; margin: 12px 0; }
+
+/* ---------- diyalog ---------- */
+.dlg { border: 0; border-radius: var(--r-l); padding: 0; width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 48px); background: var(--surface); color: var(--ink); box-shadow: 0 20px 60px rgba(0, 0, 0, .25); }
+.dlg.wide { width: min(760px, calc(100vw - 32px)); }
+.dlg::backdrop { background: rgba(17, 21, 27, .45); }
+.dlg-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 16px 4px 22px; }
+.dlg-head h2 { margin: 0; font-size: 18px; }
+.dlg-body { padding: 10px 22px 20px; }
+.dlg-body p { margin: 0 0 8px; }
+.dlg-foot { display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding: 12px 22px 18px; }
+.dlg-foot.inline { padding: 4px 0 0; }
+.dlg-lightbox .dlg-body { padding: 8px 16px 8px; }
+.lb { position: relative; display: grid; place-items: center; min-height: 200px; }
+.lb-img { max-width: 100%; max-height: 70vh; border-radius: 6px; }
+.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .55); color: #fff; font-size: 24px; cursor: pointer; }
+.lb-nav.prev { left: 6px; } .lb-nav.next { right: 6px; }
+.lb-count { margin-right: auto; color: var(--muted); font-size: 13px; }
+
+/* ---------- bildirim ---------- */
+#toasts { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); display: grid; gap: 8px; z-index: 100; width: max-content; max-width: calc(100vw - 32px); }
+.toast { background: var(--ink); color: var(--surface); padding: 10px 16px; border-radius: 8px; font-size: 14px; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); transition: opacity .3s; }
+.toast.err { background: var(--danger); color: #fff; }
+.toast.out { opacity: 0; }
+
+/* ---------- giriş ---------- */
+.splash { min-height: 100vh; display: grid; place-content: center; justify-items: center; gap: 14px; color: var(--muted); text-align: center; padding: 16px; }
+.auth { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 480px); }
+.auth-side { position: relative; overflow: hidden; background: var(--accent); color: #fff; padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
+.auth-lines { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 35px, rgba(255, 255, 255, .13) 35px 36px); }
+.auth-lines::before { content: ""; position: absolute; top: 0; bottom: 0; left: 88px; width: 2px; background: rgba(255, 255, 255, .28); }
+.auth-brand { position: relative; display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 700; }
+.auth-brand .brand-mark { background: #fff; }
+.auth-brand .brand-mark::after { background: var(--accent); box-shadow: 0 7px 0 color-mix(in srgb, var(--accent) 50%, #fff); }
+.auth-quote { position: relative; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; letter-spacing: -.03em; font-weight: 700; margin: 0 0 0 64px; max-width: 13ch; }
+.auth-card { background: var(--surface); padding: 56px 48px; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+.auth-title { margin: 0; font-size: 28px; letter-spacing: -.02em; }
+.auth-help { color: var(--muted); font-size: 13.5px; margin: 0; }
+.auth-card .btn.primary { min-height: 44px; }
+.auth .form > .link-btn { justify-self: start; padding-left: 0; }
+.demo-box { border: 1px dashed var(--line); border-radius: var(--r); padding: 14px 16px; background: var(--bg); }
+.demo-box p { margin: 4px 0 10px; color: var(--muted); font-size: 14px; }
+.auth > .auth-card:only-child { grid-column: 1 / -1; max-width: 480px; margin: auto; border-radius: var(--r-l); box-shadow: var(--shadow); }
+
+/* ---------- asistan ---------- */
+.fab { position: fixed; right: 24px; bottom: 24px; width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); font-size: 22px; cursor: pointer; box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 40%, transparent); z-index: 40; }
+.as-panel { position: fixed; right: 24px; bottom: 90px; width: min(360px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); display: none; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-l); box-shadow: 0 16px 50px rgba(0, 0, 0, .18); z-index: 40; overflow: hidden; }
+.as-panel.open { display: flex; }
+.as-head { display: flex; align-items: center; gap: 8px; padding: 10px 8px 10px 16px; border-bottom: 1px solid var(--line-2); }
+.as-head strong { flex: 1; }
+.as-log { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 160px; }
+.msg { max-width: 88%; padding: 8px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
+.msg.user { align-self: flex-end; background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 4px; }
+.msg.bot { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 4px; }
+.msg.wait { color: var(--muted); }
+.as-input { display: flex; gap: 6px; padding: 10px; border-top: 1px solid var(--line-2); }
+.as-input .input { min-height: 36px; }
+.mic.on { background: var(--danger); color: #fff; }
+.as-hint { font-size: 12px; color: var(--muted); padding: 0 12px 8px; }
+
+/* ---------- mobil ---------- */
+@media (max-width: 900px) {
+  .main { padding: 24px 16px 96px; }
+  .topbar { display: flex; align-items: center; gap: 8px; position: sticky; top: 0; z-index: 20; height: 54px; padding: 0 8px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .demo-bar ~ .app .topbar { top: 38px; }
+  .topbar .brand { font-size: 16px; }
+  .side { position: fixed; left: 0; top: 0; bottom: 0; height: 100vh; z-index: 50; transform: translateX(-100%); transition: transform .2s ease; box-shadow: 0 0 40px rgba(0, 0, 0, .2); }
+  .demo-bar ~ .app .side { top: 0; height: 100vh; }
+  .nav-open .side { transform: none; }
+  .nav-open .scrim { display: block; position: fixed; inset: 0; z-index: 45; background: rgba(0, 0, 0, .35); }
+  .page-head h1 { font-size: 25px; }
+  .who-today { grid-template-columns: 1fr; gap: 20px; }
+  .day { grid-template-columns: 1fr; gap: 10px; }
+  .day-head { position: static; display: flex; align-items: baseline; gap: 10px; }
+  .day-num { font-size: 30px; }
+  .day-meta { display: flex; gap: 8px; margin: 0; }
+  .entry { padding: 12px 14px 12px 16px; }
+  .auth { grid-template-columns: 1fr; }
+  .auth-side { min-height: 200px; padding: 28px 24px; }
+  .auth-quote { margin: 24px 0 0 56px; font-size: 30px; }
+  .auth-lines::before { left: 40px; }
+  .auth-card { padding: 32px 20px 48px; }
+  .filter-bar .input, .filter-bar .range { flex: 1 1 140px; }
+  .table .actions { white-space: normal; }
+  .fab { right: 16px; bottom: 16px; }
+  .as-panel { right: 16px; bottom: 80px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media print { .side, .topbar, .fab, .as-panel, .demo-bar { display: none !important; } }
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript>Rapor Defteri'ni kullanmak için JavaScript'i açın.</noscript>
+<script src="config.js"></script>
+<script>
+// js/util.js
+// Ortak yardımcılar: DOM, tarih, görsel, bildirim ve diyalog
+const U = (() => {
+  // h('div', {class:'x', onclick: fn}, child1, [child2, child3], 'metin')
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    if (attrs) {
+      for (const [k, v] of Object.entries(attrs)) {
+        if (v == null || v === false) continue;
+        if (k === 'class') el.className = v;
+        else if (k === 'style' && typeof v === 'object') { for (const [sk, sv] of Object.entries(v)) { if (sk.startsWith('--')) el.style.setProperty(sk, sv); else el.style[sk] = sv; } }
+        else if (k === 'html') el.innerHTML = v;
+        else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+        else if (v === true) el.setAttribute(k, '');
+        else el.setAttribute(k, v);
+      }
+    }
+    append(el, kids);
+    return el;
+  }
+  function append(el, kids) {
+    for (const c of kids.flat(Infinity)) {
+      if (c == null || c === false) continue;
+      el.appendChild(c instanceof Node ? c : document.createTextNode(String(c)));
+    }
+    return el;
+  }
+  function clear(el, ...kids) { el.replaceChildren(); return append(el, kids); }
+  const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // ---- tarih ----
+  const pad = (n) => String(n).padStart(2, '0');
+  const iso = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const today = () => iso(new Date());
+  const parse = (s) => new Date(s + 'T00:00:00');
+  const DAYS = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+  const SHORT_DAYS = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+  const MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+  const weekday = (s) => { const d = parse(s); return isNaN(d) ? '' : DAYS[d.getDay()]; };
+  const trDate = (s) => { const d = parse(s); return isNaN(d) ? s : d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); };
+  const shortDate = (s) => { const d = parse(s); return isNaN(d) ? s : pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear(); };
+  function weekRange(offset = 0) {
+    const d = new Date(); const day = d.getDay();
+    const mon = new Date(d); mon.setDate(d.getDate() + (day === 0 ? -6 : 1 - day) + offset * 7);
+    const fri = new Date(mon); fri.setDate(mon.getDate() + 4);
+    const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+    return { from: iso(mon), to: iso(fri), sun: iso(sun) };
+  }
+  function relDay(s) {
+    const t = today();
+    if (s === t) return 'Bugün';
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    if (s === iso(y)) return 'Dün';
+    return weekday(s);
+  }
+
+  // ---- metin ----
+  const norm = (s) => String(s || '').trim().toLocaleLowerCase('tr').replace(/\s+/g, ' ');
+  function normalizeUrl(u) {
+    u = String(u || '').trim();
+    if (!u) return u;
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+    return u;
+  }
+  function safeUrl(u) {
+    try { const x = new URL(u); return x.protocol === 'http:' || x.protocol === 'https:' ? x.href : null; } catch { return null; }
+  }
+  const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+  const initials = (name) => String(name || '?').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toLocaleUpperCase('tr') || '?';
+
+  // Metindeki adresleri tıklanabilir yapar (güvenli)
+  function linkify(text) {
+    const frag = document.createDocumentFragment();
+    String(text || '').split(/(https?:\/\/[^\s]+)/g).forEach((part) => {
+      const url = /^https?:\/\//.test(part) ? safeUrl(part) : null;
+      frag.appendChild(url ? h('a', { href: url, target: '_blank', rel: 'noopener' }, part) : document.createTextNode(part));
+    });
+    return frag;
+  }
+
+  // ---- görsel ----
+  function readAsDataURL(blob) {
+    return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
+  }
+  async function loadImage(src) {
+    return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('Görsel açılamadı')); i.src = src; });
+  }
+  // Büyük görselleri küçültüp JPEG'e çevirir (depolama ve hız için)
+  async function compressImage(file, max = 1600, quality = 0.84) {
+    if (file.type === 'image/gif') return file;
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await loadImage(url);
+      const scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.round(img.naturalWidth * scale), hgt = Math.round(img.naturalHeight * scale);
+      const c = document.createElement('canvas'); c.width = w; c.height = hgt;
+      const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, hgt); ctx.drawImage(img, 0, 0, w, hgt);
+      return await new Promise((res) => c.toBlob((b) => res(b || file), 'image/jpeg', quality));
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function avatarFromFile(file) {
+    const blob = await compressImage(file, 160, 0.85);
+    return readAsDataURL(blob);
+  }
+
+  // ---- bildirim ----
+  function toast(msg, kind = 'ok') {
+    let box = document.getElementById('toasts');
+    if (!box) { box = h('div', { id: 'toasts', role: 'status', 'aria-live': 'polite' }); document.body.appendChild(box); }
+    const t = h('div', { class: 'toast ' + kind }, msg);
+    box.appendChild(t);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, kind === 'err' ? 6000 : 3200);
+  }
+
+  // ---- diyalog ----
+  function dialog(title, body, { actions, wide, onClose } = {}) {
+    const dlg = h('dialog', { class: 'dlg' + (wide ? ' wide' : '') });
+    const close = () => { dlg.close(); };
+    dlg.addEventListener('close', () => { dlg.remove(); onClose && onClose(); });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+    append(dlg, [
+      h('div', { class: 'dlg-head' }, h('h2', null, title), h('button', { class: 'icon-btn', 'aria-label': 'Kapat', onclick: close }, '✕')),
+      h('div', { class: 'dlg-body' }, body),
+      actions ? h('div', { class: 'dlg-foot' }, actions) : null,
+    ]);
+    document.body.appendChild(dlg);
+    dlg.showModal();
+    return { dlg, close };
+  }
+  function confirm(title, text, okLabel = 'Sil', danger = true) {
+    return new Promise((resolve) => {
+      let done = false;
+      const d = dialog(title, h('p', null, text), {
+        onClose: () => { if (!done) resolve(false); },
+        actions: [
+          h('button', { class: 'btn ghost', onclick: () => d.close() }, 'Vazgeç'),
+          h('button', { class: 'btn ' + (danger ? 'danger' : 'primary'), onclick: () => { done = true; resolve(true); d.close(); } }, okLabel),
+        ],
+      });
+    });
+  }
+
+  function btn(label, opts = {}) {
+    return h('button', { type: opts.type || 'button', class: 'btn ' + (opts.variant || '') + (opts.small ? ' sm' : ''), onclick: opts.onclick, disabled: opts.disabled, title: opts.title, id: opts.id }, label);
+  }
+  // Uzun süren işlemlerde düğmeyi kilitler
+  async function busy(button, fn, label = 'Bekleyin…') {
+    const old = button.textContent; button.disabled = true; button.textContent = label;
+    try { return await fn(); } finally { button.disabled = false; button.textContent = old; }
+  }
+  function download(blob, name) {
+    const a = h('a', { href: URL.createObjectURL(blob), download: name });
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function loadScript(src) {
+    return new Promise((res, rej) => {
+      if (document.querySelector('script[src="' + src + '"]')) return res();
+      const s = h('script', { src }); s.onload = res; s.onerror = () => rej(new Error('Kütüphane yüklenemedi: ' + src + '. İnternet bağlantınızı kontrol edin.'));
+      document.head.appendChild(s);
+    });
+  }
+  const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+
+  return { h, append, clear, esc, iso, today, parse, weekday, shortDay: (s) => SHORT_DAYS[parse(s).getDay()], trDate, shortDate, weekRange, relDay, DAYS, MONTHS, norm, normalizeUrl, safeUrl, hostOf, initials, linkify, readAsDataURL, compressImage, avatarFromFile, toast, dialog, confirm, btn, busy, download, loadScript, uid };
+})();
+
+</script>
+<script>
+// js/api-demo.js
+// Deneme modu: Supabase ayarı yapılmadığında çalışır. Veriler yalnızca bu tarayıcıda durur.
+// Gerçek sürümdeki yetki kurallarını aynen taklit eder.
+const DemoAPI = () => {
+  const KEY = 'rd-demo-v1';
+  let db = null;
+  let images = {}; // yol -> dataURL
+  const IKEY = 'rd-demo-images-v1';
+  const saveImages = () => { try { localStorage.setItem(IKEY, JSON.stringify(images)); } catch { /* kota dolarsa yalnızca bellekte kalır */ } };
+  const listeners = [];
+  const emit = (e) => listeners.forEach((cb) => cb(e));
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+  const now = () => new Date().toISOString();
+
+  function seed() {
+    const w = U.weekRange(0);
+    const day = (i) => { const d = U.parse(w.from); d.setDate(d.getDate() + i); return U.iso(d); };
+    const t = U.today();
+    const cap = (s) => (s > t ? t : s);
+    const m = (name, email, role, color) => ({ id: U.uid(), name, email, role, color, avatar: null, active: true, user_id: null, created_at: now() });
+    const admin = m('Yönetici', 'yonetici@ornek.com', 'admin', '#3B6CF6');
+    const zey = m('Zeynep Kaya', 'zeynep@ornek.com', 'employee', '#D9822B');
+    const yav = m('Yavuz Demir', 'yavuz@ornek.com', 'employee', '#2F8F5B');
+    const elis = m('Elis Arslan', 'elis@ornek.com', 'employee', '#9B51E0');
+    const ela = m('Ela Şahin', 'ela@ornek.com', 'employee', '#D1435B');
+    const r = (mem, date, raw_text, type = 'gunluk', extra = {}) => ({ id: U.uid(), member_id: mem.id, date: cap(date), type, raw_text, links: [], images: [], important: false, created_by: null, created_at: now(), updated_at: now(), ...extra });
+    return {
+      users: { 'yonetici@ornek.com': 'deneme', 'zeynep@ornek.com': 'deneme' },
+      session: null,
+      members: [admin, zey, yav, elis, ela],
+      reports: [
+        r(zey, day(0), 'Haftalık sosyal medya takvimini hazırladım, perşembe gününe kadar onaya gönderiyorum.'),
+        r(yav, day(0), 'Müşteri sunumu için ilk taslak tamam. Grafiklerde güncel ay verisini bekliyorum.'),
+        r(elis, day(1), 'Web sitesindeki iletişim formu hatası çözüldü, test ettim.', 'hazir', { links: ['https://example.com/form'] }),
+        r(zey, day(1), 'Kampanya görsellerinin ilk iki versiyonu hazır.', 'hazir', { important: true }),
+        r(ela, day(2), 'Tedarikçiyle görüştüm, teslim tarihi bir hafta öne çekildi.'),
+        r(yav, day(2), 'Sunum müşteriye gönderildi. Geri dönüş cuma bekleniyor.', 'hazir'),
+        r(elis, day(3), 'Gelecek hafta mobil uyum testlerine başlayacağım.', 'gelecek_hafta'),
+        r(zey, day(3), 'Bülten metni yazıldı, son okuma Ela\'da.'),
+      ],
+      notes: [
+        { id: U.uid(), date: cap(day(1)), type: 'toplanti', text: 'Haftalık toplantı: kampanya takvimi ve sunum teslim tarihleri konuşuldu. Görsel onayları perşembe verilecek.', created_by: null, created_at: now() },
+        { id: U.uid(), date: cap(day(3)), type: 'etkinlik', text: 'Gelecek hafta salı 14.00\'te müşteri ziyareti var.', created_by: null, created_at: now() },
+      ],
+      settings: {},
+    };
+  }
+  function load() {
+    try { db = JSON.parse(localStorage.getItem(KEY)); } catch { db = null; }
+    if (!db || !db.members) { db = seed(); save(); }
+    try { images = JSON.parse(localStorage.getItem(IKEY)) || {}; } catch { images = {}; }
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch { /* depolama kapalı olabilir */ } }
+  const user = () => (db.session ? db.members.find((m) => m.email === db.session && m.active) : null);
+  const isAdmin = () => { const u = user(); return !!u && u.role === 'admin'; };
+  function need() { if (!user()) throw new Error('Oturum kapalı. Tekrar giriş yap.'); }
+  const visibleReport = (r) => isAdmin() || (user() && r.member_id === user().id);
+  const delay = () => new Promise((r) => setTimeout(r, 60));
+
+  return {
+    mode: 'demo',
+    async init() { load(); },
+    session: () => (db.session ? { email: db.session } : null),
+    onAuth: (cb) => listeners.push(cb),
+    async signIn(email, pw) {
+      await delay(); email = email.trim().toLowerCase();
+      if (db.users[email] !== pw) throw new Error('E-posta ya da şifre hatalı.');
+      db.session = email; save(); emit('SIGNED_IN');
+    },
+    async canSignUp(email) {
+      const m = db.members.find((x) => x.email === email.trim().toLowerCase());
+      if (!m) return 'YOK'; if (!m.active) return 'PASIF'; if (db.users[m.email]) return 'VAR'; return 'UYGUN';
+    },
+    async signUp(email, pw) {
+      await delay(); email = email.trim().toLowerCase();
+      const st = await this.canSignUp(email);
+      if (st === 'VAR') throw new Error('Bu e-postayla zaten hesap açılmış. Giriş yap ekranını kullan.');
+      if (st !== 'UYGUN') throw new Error('Bu e-posta ekip listesinde yok. Yöneticinden seni eklemesini iste.');
+      if (pw.length < 6) throw new Error('Şifre en az 6 karakter olmalı.');
+      db.users[email] = pw; db.session = email; save(); emit('SIGNED_IN');
+      return { needsConfirm: false };
+    },
+    async signOut() { db.session = null; save(); emit('SIGNED_OUT'); },
+    async updatePassword(pw) { need(); if (pw.length < 6) throw new Error('Şifre en az 6 karakter olmalı.'); db.users[db.session] = pw; save(); },
+    async resetPassword() { throw new Error('Deneme modunda şifre sıfırlama e-postası gönderilmez. Şifre: deneme'); },
+    async loginAs(role) {
+      const m = db.members.find((x) => x.active && x.role === role);
+      if (!m) throw new Error('Bu rolde aktif kişi yok.');
+      db.users[m.email] = db.users[m.email] || 'deneme';
+      db.session = m.email; save(); emit('SIGNED_IN');
+    },
+    async resetDemo() { localStorage.removeItem(KEY); localStorage.removeItem(IKEY); images = {}; load(); emit('SIGNED_OUT'); },
+
+    async me() { return user() ? { ...clone(user()), user_id: 'demo-' + user().id } : null; },
+    async members() { need(); return clone(isAdmin() ? db.members : db.members.filter((m) => m.id === user().id)).map((m) => ({ ...m, user_id: db.users[m.email] ? 'demo-' + m.id : null })); },
+    async saveMember(m) {
+      need(); await delay();
+      if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      const email = String(m.email || '').trim().toLowerCase();
+      if (!m.name || !m.name.trim()) throw new Error('İsim boş olamaz.');
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Geçerli bir e-posta yaz.');
+      if (db.members.some((x) => x.email === email && x.id !== m.id)) throw new Error('Bu e-posta zaten ekip listesinde.');
+      const row = { name: m.name.trim(), email, role: m.role || 'employee', color: m.color || '#3B6CF6', avatar: m.avatar || null, active: m.active !== false };
+      if (m.id) {
+        const cur = db.members.find((x) => x.id === m.id);
+        if (cur.role === 'admin' && cur.active && (row.role !== 'admin' || !row.active) && !db.members.some((x) => x.role === 'admin' && x.active && x.id !== cur.id)) throw new Error('En az bir aktif yönetici kalmalı.');
+        if (cur.email !== email && db.users[cur.email]) { db.users[email] = db.users[cur.email]; delete db.users[cur.email]; if (db.session === cur.email) db.session = email; }
+        Object.assign(cur, row); save(); return clone(cur);
+      }
+      const n = { id: U.uid(), ...row, user_id: null, created_at: now() };
+      db.members.push(n); save(); return clone(n);
+    },
+
+    async reports() { need(); return clone(db.reports.filter(visibleReport).sort((a, b) => b.date.localeCompare(a.date) || b.created_at.localeCompare(a.created_at))); },
+    async addReport(r) {
+      need(); await delay();
+      if (!isAdmin() && r.member_id !== user().id) throw new Error('Rapor kaydedilemedi: yetki yok.');
+      const n = { id: U.uid(), date: U.today(), type: 'gunluk', raw_text: '', links: [], images: [], ...r, important: isAdmin() ? !!r.important : false, created_by: user().id, created_at: now(), updated_at: now() };
+      db.reports.push(n); save(); return clone(n);
+    },
+    async updateReport(id, patch) {
+      need(); await delay();
+      const cur = db.reports.find((x) => x.id === id);
+      if (!cur || !visibleReport(cur)) throw new Error('Rapor güncellenemedi: yetki yok.');
+      const p = { ...patch };
+      if (!isAdmin()) { delete p.important; delete p.member_id; }
+      Object.assign(cur, p, { updated_at: now() }); save(); return clone(cur);
+    },
+    async deleteReport(r) {
+      need(); await delay();
+      const cur = db.reports.find((x) => x.id === r.id);
+      if (!cur || !visibleReport(cur)) throw new Error('Rapor silinemedi: yetki yok.');
+      db.reports = db.reports.filter((x) => x.id !== r.id); (cur.images || []).forEach((p) => delete images[p]); save(); saveImages();
+    },
+
+    async uploadImage(memberId, blob) {
+      need();
+      if (!isAdmin() && memberId !== user().id) throw new Error('Görsel yüklenemedi: yetki yok.');
+      const path = memberId + '/' + U.uid() + '.jpg';
+      images[path] = await U.readAsDataURL(blob); saveImages();
+      return path;
+    },
+    async imageUrls(paths) { const o = {}; paths.forEach((p) => { if (images[p]) o[p] = images[p]; }); return o; },
+    async imageDataUrl(path) { if (!images[path]) throw new Error('Görsel bulunamadı'); return images[path]; },
+    async removeImages(paths) { paths.forEach((p) => delete images[p]); saveImages(); },
+
+    async notes() { need(); return clone(db.notes.slice().sort((a, b) => b.date.localeCompare(a.date) || b.created_at.localeCompare(a.created_at))); },
+    async addNote(n) {
+      need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      const x = { id: U.uid(), date: U.today(), type: 'toplanti', ...n, created_by: user().id, created_at: now() };
+      db.notes.push(x); save(); return clone(x);
+    },
+    async deleteNote(id) { need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.'); db.notes = db.notes.filter((n) => n.id !== id); save(); },
+
+    async getSetting(key) { need(); if (!isAdmin()) return null; return db.settings[key] ?? null; },
+    async setSetting(key, value) { need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.'); db.settings[key] = value; save(); },
+  };
+};
+
+</script>
+<script>
+// js/api-remote.js
+// Supabase bağlantısı (gerçek, ortak veri)
+const RemoteAPI = (cfg) => {
+  const sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+  });
+  const BUCKET = 'report-images';
+  let session = null;
+  let myMember = null;
+
+  const fail = (error, fallback) => {
+    if (!error) return;
+    const m = error.message || String(error);
+    if (/YETKISIZ_EPOSTA|Database error saving new user/i.test(m)) throw new Error('Bu e-posta ekip listesinde yok. Yöneticinden seni eklemesini iste.');
+    if (/SON_YONETICI/.test(m)) throw new Error('En az bir aktif yönetici kalmalı.');
+    if (/Invalid login credentials/i.test(m)) throw new Error('E-posta ya da şifre hatalı.');
+    if (/Email not confirmed/i.test(m)) throw new Error('E-posta adresin henüz onaylanmamış. Gelen kutundaki onay bağlantısına tıkla.');
+    if (/already registered/i.test(m)) throw new Error('Bu e-postayla zaten hesap açılmış. Giriş yap ekranını kullan.');
+    if (/Password should be at least/i.test(m)) throw new Error('Şifre en az 6 karakter olmalı.');
+    if (/rate limit/i.test(m)) throw new Error('Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar dene.');
+    if (/duplicate key.*members_email/i.test(m)) throw new Error('Bu e-posta zaten ekip listesinde.');
+    if (/Failed to fetch|NetworkError/i.test(m)) throw new Error('Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.');
+    throw new Error(fallback ? fallback + ': ' + m : m);
+  };
+
+  const listeners = [];
+  sb.auth.onAuthStateChange((event, s) => {
+    session = s;
+    if (event === 'SIGNED_OUT') myMember = null;
+    listeners.forEach((cb) => cb(event));
+  });
+
+  return {
+    mode: 'remote',
+    async init() { const { data } = await sb.auth.getSession(); session = data.session; },
+    session: () => (session ? { email: session.user.email } : null),
+    onAuth: (cb) => listeners.push(cb),
+    async signIn(email, pw) { const { error } = await sb.auth.signInWithPassword({ email: email.trim().toLowerCase(), password: pw }); fail(error); },
+    async canSignUp(email) { const { data, error } = await sb.rpc('can_sign_up', { p_email: email }); fail(error); return data; },
+    async signUp(email, pw) {
+      const { data, error } = await sb.auth.signUp({ email: email.trim().toLowerCase(), password: pw, options: { emailRedirectTo: location.origin + location.pathname } });
+      fail(error);
+      return { needsConfirm: !data.session };
+    },
+    async signOut() { await sb.auth.signOut(); myMember = null; },
+    async updatePassword(pw) { const { error } = await sb.auth.updateUser({ password: pw }); fail(error); },
+    async resetPassword(email) { const { error } = await sb.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: location.origin + location.pathname }); fail(error); },
+
+    async me() {
+      if (!session) return null;
+      const { data, error } = await sb.from('members').select('*').eq('user_id', session.user.id).eq('active', true).maybeSingle();
+      fail(error);
+      myMember = data;
+      return data;
+    },
+    async members() { const { data, error } = await sb.from('members').select('*').order('created_at'); fail(error); return data; },
+    async saveMember(m) {
+      const row = { name: m.name, email: m.email, role: m.role, color: m.color, avatar: m.avatar || null, active: m.active !== false };
+      const q = m.id ? sb.from('members').update(row).eq('id', m.id) : sb.from('members').insert(row);
+      const { data, error } = await q.select().single();
+      fail(error, 'Kaydedilemedi');
+      return data;
+    },
+
+    async reports() {
+      const all = []; const size = 1000;
+      for (let from = 0; ; from += size) {
+        const { data, error } = await sb.from('reports').select('*').order('date', { ascending: false }).order('created_at', { ascending: false }).range(from, from + size - 1);
+        fail(error);
+        all.push(...data);
+        if (data.length < size) break;
+      }
+      return all;
+    },
+    async addReport(r) { const { data, error } = await sb.from('reports').insert(r).select().single(); fail(error, 'Rapor kaydedilemedi'); return data; },
+    async updateReport(id, patch) { const { data, error } = await sb.from('reports').update(patch).eq('id', id).select().single(); fail(error, 'Rapor güncellenemedi'); return data; },
+    async deleteReport(r) {
+      const { error } = await sb.from('reports').delete().eq('id', r.id); fail(error, 'Rapor silinemedi');
+      if (r.images && r.images.length) await sb.storage.from(BUCKET).remove(r.images);
+    },
+
+    async uploadImage(memberId, blob) {
+      const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/gif' ? 'gif' : blob.type === 'image/webp' ? 'webp' : 'jpg';
+      const path = memberId + '/' + U.uid() + '.' + ext;
+      const { error } = await sb.storage.from(BUCKET).upload(path, blob, { contentType: blob.type || 'image/jpeg', upsert: false });
+      fail(error, 'Görsel yüklenemedi');
+      return path;
+    },
+    async imageUrls(paths) {
+      const out = {};
+      if (!paths.length) return out;
+      for (let i = 0; i < paths.length; i += 100) {
+        const { data, error } = await sb.storage.from(BUCKET).createSignedUrls(paths.slice(i, i + 100), 60 * 60 * 6);
+        fail(error);
+        data.forEach((d) => { if (d.signedUrl) out[d.path] = d.signedUrl; });
+      }
+      return out;
+    },
+    async imageDataUrl(path) {
+      const { data, error } = await sb.storage.from(BUCKET).download(path);
+      fail(error);
+      return U.readAsDataURL(data);
+    },
+    async removeImages(paths) { if (paths.length) await sb.storage.from(BUCKET).remove(paths); },
+
+    async notes() { const { data, error } = await sb.from('team_notes').select('*').order('date', { ascending: false }).order('created_at', { ascending: false }); fail(error); return data; },
+    async addNote(n) { const { data, error } = await sb.from('team_notes').insert(n).select().single(); fail(error, 'Not kaydedilemedi'); return data; },
+    async deleteNote(id) { const { error } = await sb.from('team_notes').delete().eq('id', id); fail(error, 'Not silinemedi'); },
+
+    async getSetting(key) { const { data, error } = await sb.from('settings').select('value').eq('key', key).maybeSingle(); fail(error); return data ? data.value : null; },
+    async setSetting(key, value) { const { error } = await sb.from('settings').upsert({ key, value, updated_at: new Date().toISOString() }); fail(error, 'Ayar kaydedilemedi'); },
+  };
+};
+
+</script>
+<script>
+// js/ai.js
+// Google Gemini ile analiz, haftalık değerlendirme ve asistan komutları
+const AI = (() => {
+  const DEFAULT_MODEL = 'gemini-flash-latest';
+
+  async function call({ apiKey, model, system, text, images = [], maxTokens = 8192, json = false }) {
+    if (!apiKey) throw new Error('Gemini API anahtarı girilmemiş. Ayarlar > Yapay zekâ bölümünden ekle.');
+    const m = (model || DEFAULT_MODEL).trim();
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent';
+    const parts = [{ text }];
+    images.forEach((img) => parts.push({ inline_data: { mime_type: img.mimeType, data: img.data } }));
+    const body = {
+      system_instruction: { parts: [{ text: system }] },
+      contents: [{ role: 'user', parts }],
+      generationConfig: { maxOutputTokens: maxTokens, ...(json ? { responseMimeType: 'application/json' } : {}) },
+    };
+    let res;
+    try {
+      res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body) });
+    } catch (e) { throw new Error('Gemini\'ye ulaşılamadı. İnternet bağlantını kontrol et.'); }
+    let data = null;
+    try { data = await res.json(); } catch { /* boş yanıt */ }
+    if (!res.ok || (data && data.error)) {
+      const msg = (data && data.error && data.error.message) || ('HTTP ' + res.status);
+      if (res.status === 404) throw new Error('"' + m + '" modeli bulunamadı. Ayarlar > Yapay zekâ bölümünden model adını değiştir (önerilen: ' + DEFAULT_MODEL + ').');
+      if (res.status === 400 && /API key/i.test(msg)) throw new Error('Gemini API anahtarı geçersiz. Ayarlar > Yapay zekâ bölümünden kontrol et.');
+      if (res.status === 429) throw new Error('Gemini\'nin ücretsiz kullanım sınırı doldu. Biraz bekleyip tekrar dene.');
+      throw new Error('Gemini hatası: ' + msg);
+    }
+    const cand = data && data.candidates && data.candidates[0];
+    const out = cand && cand.content && cand.content.parts ? cand.content.parts.filter((p) => !p.thought).map((p) => p.text || '').join('\n').trim() : '';
+    if (!out) {
+      if (cand && cand.finishReason === 'MAX_TOKENS') throw new Error('Yanıt çok uzun oldu ve kesildi. Tarih aralığını daraltıp tekrar dene.');
+      if (cand && cand.finishReason === 'SAFETY') throw new Error('Gemini bu isteğe yanıt vermedi (güvenlik filtresi).');
+      throw new Error('Gemini boş yanıt döndürdü. Tekrar dene.');
+    }
+    return out;
+  }
+
+  const inRange = (d, from, to) => (!from || d >= from) && (!to || d <= to);
+
+  // Kayıtları Gemini'ye gidecek biçime çevirir; görseller id ile eşleştirilir
+  async function promptData(state, from, to, { withImages = true, maxImages = 12, onlyImportant = false } = {}) {
+    let ref = 1; const idToPath = {}; const imageParts = []; const allData = {};
+    for (const emp of state.employees) {
+      let recs = state.reports.filter((r) => r.member_id === emp.id && inRange(r.date, from, to)).sort((a, b) => a.date.localeCompare(b.date));
+      if (onlyImportant) recs = recs.filter((r) => r.important);
+      if (!recs.length) continue;
+      allData[emp.name] = [];
+      for (const r of recs) {
+        const id = 'R' + ref++;
+        const ids = [];
+        for (let i = 0; i < (r.images || []).length; i++) {
+          const sub = id + '-' + i; idToPath[sub] = r.images[i]; ids.push(sub);
+          if (withImages && imageParts.length < maxImages) {
+            try {
+              const du = await API.imageDataUrl(r.images[i]);
+              const m = /^data:([^;]+);base64,(.+)$/.exec(du);
+              if (m) imageParts.push({ mimeType: m[1], data: m[2] });
+            } catch { /* görsel okunamadıysa atla */ }
+          }
+        }
+        allData[emp.name].push({ id, date: r.date, gun: U.weekday(r.date), tur: r.type, raw_text: r.raw_text, important: !!r.important, image_ids: ids, links: r.links || [] });
+      }
+    }
+    return { allData, idToPath, imageParts };
+  }
+
+  const ASK_SYSTEM = `Sen bir çalışan rapor kayıtları analiz asistanısın. Sana JSON formatında çalışanların tarih damgalı rapor kayıtları verilecek. Her kaydın "id", "date", "gun", "tur", "raw_text", "important", "image_ids" ve "links" alanları var. "tur": "gunluk" (günlük not), "hazir" (tamamlanmış iş), "gelecek_hafta" (gelecek hafta planı).
+Bazı kayıtların görselleri ayrıca resim olarak da gönderildi (image_ids sırasıyla).
+KURAL 1 - GÖRSEL: Cevabında görseli olan bir kayda değiniyorsan, ilgili cümleden hemen sonra YENİ SATIRDA her görsel için [[IMG:R3-0]] biçiminde bir işaret koy.
+KURAL 2 - BAĞLANTI: Bir kaydın bağlantısına değiniyorsan URL'yi olduğu gibi tam yaz.
+Kullanıcı "önemli notları özetle" derse SADECE "important": true olan kayıtları kullan.
+SADECE verilen kayıtlara dayan, uydurma; bilgi yoksa "bu bilgi kayıtlarda yok" de. Kısa, net, Türkçe cevap ver. Markdown yıldız ya da kalın yazı kullanma.`;
+
+  const WEEKLY_SYSTEM = `Sen bir ekip yöneticisi için haftalık değerlendirme raporu yazan bir asistansın. Sana JSON formatında iki şey verilecek:
+1) "calisanlar": çalışan isimlerine göre gruplanmış, her birinin o dönemdeki mesajları. Her mesajın "tarih", "gun", "mesaj" ve "tur" alanı var. "tur": "gunluk" (normal günlük çalışma notu), "hazir" (tamamlanmış/hazır iş; bunu "tamamladı", "hazırladı", "bitirdi" gibi ifadelerle vurgula), "gelecek_hafta" (çalışanın gelecek hafta yapacağı iş; bunu SADECE "GELECEK HAFTA EKİBİN ÇALIŞACAĞI ALANLAR" bölümünde kullan).
+2) "ekip": "toplantilar" (toplantı notları, tarih+gün+metin) ve "gelecek_hafta_etkinlikleri" (ekibin geneline ait gelecek hafta planları).
+
+GÖREV: Aşağıdaki şablona TAM uyan, DETAYLI ve AÇIKLAYICI bir "Haftalık Ekip Değerlendirmesi" yaz. Her madde tam bir cümle olsun; ne yapıldığını, hangi kararın alındığını, sonucun ne olduğunu açıkça anlat.
+
+HAFTALIK EKİP DEĞERLENDİRMESİ
+
+📅 <GÜN ADI>
+
+<Çalışan Adı>
+- <o gün yaptığı işi ayrıntılı, tam cümle halinde anlatan madde>
+
+(O güne ait toplantı varsa, o günün altına "Ekip Çalışması" başlığı aç ve toplantı notunu ayrıntılı yaz. Birden fazla çalışanın ortak konusu varsa da bu başlığı kullanabilirsin.)
+
+Günleri kronolojik sırayla yaz ve aralarına "---" koy. Kaydı olmayan günü hiç yazma.
+
+Rapor sonunda (SADECE ilgili veri varsa):
+
+📌 GELECEK HAFTA YAPILACAK ETKİNLİKLER
+- <madde>
+
+📌 GELECEK HAFTA EKİBİN ÇALIŞACAĞI ALANLAR
+
+<Çalışan Adı>
+- <"tur":"gelecek_hafta" mesajlarından üretilmiş madde>
+
+KURALLAR:
+- Mesajları olduğu gibi kopyalama, kendi cümlelerinle net madde haline getir.
+- SADECE verilen verilere dayan, asla bilgi uydurma.
+- "hazir" mesajlarda işin tamamlandığını açıkça belirt.
+- "gelecek_hafta" mesajlarını günlük bölümde ASLA kullanma.
+- O gün kaydı olmayan çalışanın adını o günün altına yazma.
+- Türkçe, düz metin yaz (markdown yıldız/kalın kullanma), başlık ve emoji biçimine sadık kal.`;
+
+  function weeklyData(state, from, to) {
+    const calisanlar = {};
+    state.employees.forEach((emp) => {
+      const recs = state.reports.filter((r) => r.member_id === emp.id && inRange(r.date, from, to)).sort((a, b) => a.date.localeCompare(b.date));
+      if (recs.length) calisanlar[emp.name] = recs.map((r) => ({ tarih: r.date, gun: U.weekday(r.date), mesaj: r.raw_text || '', tur: r.type || 'gunluk' }));
+    });
+    const notes = state.notes.filter((n) => inRange(n.date, from, to));
+    const ekip = {
+      toplantilar: notes.filter((n) => n.type === 'toplanti').map((n) => ({ tarih: n.date, gun: U.weekday(n.date), metin: n.text })),
+      gelecek_hafta_etkinlikleri: notes.filter((n) => n.type === 'etkinlik').map((n) => ({ tarih: n.date, metin: n.text })),
+    };
+    const empty = !Object.keys(calisanlar).length && !ekip.toplantilar.length && !ekip.gelecek_hafta_etkinlikleri.length;
+    return { calisanlar, ekip, empty };
+  }
+
+  const assistantSystem = (names) => `Sen bir rapor defteri uygulamasının asistanısın (Türkçe konuşuyorsun). Kullanıcının sesli/yazılı komutunu al ve SADECE aşağıdaki JSON nesnelerinden birini döndür:
+{"action":"add_record","employee":"<isim>","text":"<mesaj>","type":"gunluk|hazir|gelecek_hafta","link":null,"important":false}
+{"action":"mark_important_latest","employee":"<isim>"}
+{"action":"open_employee","employee":"<isim>"}
+{"action":"search_summary","query":"<soru>"}
+{"action":"speak","text":"<doğal Türkçe cevap>"}
+Geçerli çalışan isimleri: ${names.join(', ')}.
+"X için not/kayıt ekle" → add_record. Bir çalışanın sayfasını açmak → open_employee. Geçmiş kayıtlar hakkında soru → search_summary. Net bir eylem değilse → speak.
+SADECE JSON döndür.`;
+
+  function extractJson(text) {
+    const s = text.indexOf('{'), e = text.lastIndexOf('}');
+    if (s < 0 || e < s) return null;
+    try { return JSON.parse(text.slice(s, e + 1)); } catch { return null; }
+  }
+
+  return { DEFAULT_MODEL, call, promptData, weeklyData, ASK_SYSTEM, WEEKLY_SYSTEM, assistantSystem, extractJson, inRange };
+})();
+
+</script>
+<script>
+// js/export.js
+// Excel yedeği ve PDF (yazdır) çıktıları
+const Export = (() => {
+  const EXCELJS = 'https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js';
+  const TYPE = { gunluk: 'Günlük not', hazir: 'Tamamlanan iş', gelecek_hafta: 'Gelecek hafta planı' };
+
+  async function excel(state, { from, to, title, fileName, onProgress }) {
+    await U.loadScript(EXCELJS);
+    const wb = new window.ExcelJS.Workbook();
+    wb.creator = 'Rapor Defteri';
+    const ws = wb.addWorksheet('Raporlar', { views: [{ state: 'frozen', ySplit: 3 }] });
+    ws.columns = [{ width: 12 }, { width: 11 }, { width: 18 }, { width: 18 }, { width: 60 }, { width: 9 }, { width: 34 }, { width: 40 }];
+    ws.mergeCells('A1:H1');
+    ws.getCell('A1').value = title;
+    ws.getCell('A1').font = { bold: true, size: 13 };
+    const head = ['Tarih', 'Gün', 'Çalışan', 'Tür', 'Mesaj', 'Önemli', 'Bağlantılar', 'Görseller'];
+    head.forEach((t, i) => { const c = ws.getCell(3, i + 1); c.value = t; c.font = { bold: true }; c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE8EDF7' } }; });
+
+    const byId = Object.fromEntries(state.members.map((m) => [m.id, m]));
+    const recs = state.reports.filter((r) => AI.inRange(r.date, from, to)).sort((a, b) => a.date.localeCompare(b.date) || (byId[a.member_id]?.name || '').localeCompare(byId[b.member_id]?.name || '', 'tr'));
+    let row = 4, imgCount = 0;
+    for (let k = 0; k < recs.length; k++) {
+      const r = recs[k];
+      onProgress && onProgress(k + 1, recs.length);
+      const x = ws.getRow(row);
+      x.getCell(1).value = U.shortDate(r.date);
+      x.getCell(2).value = U.weekday(r.date);
+      x.getCell(3).value = byId[r.member_id]?.name || '—';
+      x.getCell(4).value = TYPE[r.type] || r.type;
+      x.getCell(5).value = r.raw_text || '';
+      x.getCell(6).value = r.important ? 'Evet' : '';
+      const links = r.links || [];
+      if (links.length === 1) { x.getCell(7).value = { text: links[0], hyperlink: links[0] }; x.getCell(7).font = { color: { argb: 'FF2B4ACB' }, underline: true }; }
+      else if (links.length > 1) x.getCell(7).value = links.join('\n');
+      [5, 7].forEach((c) => { x.getCell(c).alignment = { wrapText: true, vertical: 'top' }; });
+      [1, 2, 3, 4, 6].forEach((c) => { x.getCell(c).alignment = { vertical: 'top' }; });
+      const imgs = (r.images || []).slice(0, 4);
+      for (let i = 0; i < imgs.length; i++) {
+        try {
+          const du = await API.imageDataUrl(imgs[i]);
+          const m = /^data:image\/([a-z0-9.+-]+);base64,/i.exec(du);
+          let ext = m ? m[1].toLowerCase() : 'jpeg'; if (ext === 'jpg') ext = 'jpeg'; if (!['png', 'jpeg', 'gif'].includes(ext)) ext = 'jpeg';
+          const id = wb.addImage({ base64: du, extension: ext });
+          ws.addImage(id, { tl: { col: 7 + i * 0.25, row: row - 1 + 0.1 }, ext: { width: 66, height: 66 } });
+          imgCount++;
+        } catch { /* görsel atlanır */ }
+      }
+      if ((r.images || []).length > 4) x.getCell(8).value = '+' + (r.images.length - 4) + ' görsel daha';
+      x.height = imgs.length ? 56 : Math.min(120, 16 * Math.max(1, Math.ceil((r.raw_text || '').length / 70)));
+      row++;
+    }
+    const buf = await wb.xlsx.writeBuffer();
+    U.download(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), fileName + '.xlsx');
+    return { count: recs.length, imgCount };
+  }
+
+  // Tarayıcının yazdırma penceresini açar; oradan "PDF olarak kaydet" seçilir
+  function printPdf(title, bodyNode) {
+    const frame = U.h('iframe', { style: { position: 'fixed', right: '0', bottom: '0', width: '0', height: '0', border: '0' }, 'aria-hidden': 'true' });
+    document.body.appendChild(frame);
+    const doc = frame.contentDocument;
+    doc.open();
+    doc.write(`<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>${U.esc(title)}</title><style>
+      @page{size:A4;margin:18mm 16mm}
+      body{font-family:"Schibsted Grotesk",Arial,sans-serif;color:#1C2430;font-size:12.5px;line-height:1.65}
+      h1{font-size:19px;margin:0 0 4px;font-weight:700}
+      .meta{color:#6B7380;font-size:11px;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #1C2430}
+      .out{white-space:pre-wrap}
+      .out img{max-width:240px;max-height:240px;border-radius:4px;margin:6px 0;display:block;page-break-inside:avoid}
+      a{color:#2B4ACB}
+    </style></head><body><h1>${U.esc(title)}</h1><div class="meta">Oluşturulma: ${new Date().toLocaleString('tr-TR')}</div><div class="out"></div></body></html>`);
+    doc.close();
+    doc.querySelector('.out').appendChild(doc.importNode(bodyNode, true));
+    const imgs = [...doc.images];
+    Promise.all(imgs.map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))).then(() => {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      setTimeout(() => frame.remove(), 60000);
+    });
+  }
+
+  function json(state) {
+    const byId = Object.fromEntries(state.members.map((m) => [m.id, m.name]));
+    const data = {
+      olusturulma: new Date().toISOString(),
+      uyeler: state.members.map(({ name, email, role, active }) => ({ name, email, role, active })),
+      raporlar: state.reports.map((r) => ({ calisan: byId[r.member_id], tarih: r.date, tur: r.type, mesaj: r.raw_text, onemli: r.important, baglantilar: r.links, gorsel_sayisi: (r.images || []).length })),
+      ekip_notlari: state.notes.map((n) => ({ tarih: n.date, tur: n.type, metin: n.text })),
+    };
+    U.download(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), 'rapor-defteri-yedek-' + U.today() + '.json');
+  }
+
+  return { excel, printPdf, json, TYPE };
+})();
+
+</script>
+<script>
+// js/core.js
+// Uygulama durumu, veri yükleme ve ortak bileşenler
+let API = null;
+const S = {
+  me: null, members: [], employees: [], reports: [], notes: [],
+  urls: {}, gemini: null, backup: null, loadedAt: 0,
+};
+const isAdmin = () => !!S.me && S.me.role === 'admin';
+const memberById = (id) => S.members.find((m) => m.id === id);
+const TYPES = {
+  gunluk: { label: 'Günlük not', short: 'Günlük' },
+  hazir: { label: 'Tamamlanan iş', short: 'Tamamlandı' },
+  gelecek_hafta: { label: 'Gelecek hafta planı', short: 'Gelecek hafta' },
+};
+const NOTE_TYPES = { toplanti: 'Toplantı notu', etkinlik: 'Gelecek hafta etkinliği' };
+const PALETTE = ['#3B6CF6', '#D9822B', '#2F8F5B', '#9B51E0', '#D1435B', '#1A9AA0', '#B8860B', '#5B6B82'];
+
+async function loadData() {
+  const [members, reports, notes] = await Promise.all([API.members(), API.reports(), API.notes()]);
+  S.members = members; S.reports = reports; S.notes = notes;
+  const me = members.find((m) => m.id === S.me.id); if (me) S.me = me;
+  S.employees = isAdmin()
+    ? members.filter((m) => m.role === 'employee' && m.active).sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+    : [S.me];
+  if (isAdmin()) {
+    const [g, b] = await Promise.all([API.getSetting('gemini').catch(() => null), API.getSetting('backup').catch(() => null)]);
+    S.gemini = g; S.backup = b;
+  }
+  S.loadedAt = Date.now();
+}
+
+const reportsOf = (memberId) => S.reports.filter((r) => r.member_id === memberId);
+const reportedToday = (memberId) => S.reports.some((r) => r.member_id === memberId && r.date === U.today());
+
+// ---- avatar ----
+function avatar(m, size = 32) {
+  const { h } = U;
+  const style = { width: size + 'px', height: size + 'px', fontSize: Math.round(size * 0.4) + 'px' };
+  if (m && m.avatar) return h('img', { class: 'avatar', src: m.avatar, alt: '', style });
+  return h('span', { class: 'avatar', style: { ...style, background: (m && m.color) || '#8A93A3' }, 'aria-hidden': 'true' }, U.initials(m && m.name));
+}
+
+// ---- görsel adresleri (gizli depodan imzalı bağlantı) ----
+async function fillImages(root) {
+  const imgs = [...root.querySelectorAll('img[data-path]')];
+  const need = [...new Set(imgs.map((i) => i.dataset.path).filter((p) => !S.urls[p]))];
+  if (need.length) {
+    try { Object.assign(S.urls, await API.imageUrls(need)); } catch (e) { console.warn(e); }
+  }
+  imgs.forEach((i) => { if (S.urls[i.dataset.path]) i.src = S.urls[i.dataset.path]; else i.classList.add('missing'); });
+}
+
+function lightbox(paths, start = 0) {
+  const { h } = U;
+  let i = start;
+  const img = h('img', { class: 'lb-img', alt: '' });
+  const count = h('span', { class: 'lb-count' });
+  const show = () => { img.src = S.urls[paths[i]] || ''; count.textContent = paths.length > 1 ? (i + 1) + ' / ' + paths.length : ''; };
+  const nav = (d) => { i = (i + d + paths.length) % paths.length; show(); };
+  const body = h('div', { class: 'lb' },
+    paths.length > 1 ? h('button', { class: 'lb-nav prev', 'aria-label': 'Önceki görsel', onclick: () => nav(-1) }, '‹') : null,
+    img,
+    paths.length > 1 ? h('button', { class: 'lb-nav next', 'aria-label': 'Sonraki görsel', onclick: () => nav(1) }, '›') : null,
+  );
+  const d = U.dialog('Görsel', body, { wide: true, actions: [count, h('a', { class: 'btn ghost', href: '#', onclick: (e) => { e.preventDefault(); window.open(S.urls[paths[i]], '_blank', 'noopener'); } }, 'Yeni sekmede aç')] });
+  d.dlg.classList.add('dlg-lightbox');
+  d.dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') nav(-1); if (e.key === 'ArrowRight') nav(1); });
+  show();
+}
+
+// =====================================================================
+// RAPOR YAZMA ALANI (yeni rapor ve düzenleme için ortak)
+// =====================================================================
+function composer({ memberId, report, onDone, compact }) {
+  const { h } = U;
+  const editing = !!report;
+  const draftKey = 'rd-draft-' + memberId;
+  let draft = null;
+  if (!editing) { try { draft = JSON.parse(localStorage.getItem(draftKey) || 'null'); } catch { draft = null; } }
+  let type = report ? report.type : (draft && draft.type) || 'gunluk';
+  const oldImages = report ? [...(report.images || [])] : [];
+  let keepImages = [...oldImages];
+  const newImages = []; // {blob, url}
+  let links = report && report.links && report.links.length ? [...report.links] : (draft && draft.links && draft.links.length ? draft.links : []);
+
+  const saveDraft = () => {
+    if (editing) return;
+    try {
+      const v = { text: ta.value, type, links: links.filter(Boolean) };
+      if (v.text || v.links.length) localStorage.setItem(draftKey, JSON.stringify(v)); else localStorage.removeItem(draftKey);
+    } catch { /* depolama kapalı */ }
+  };
+
+  const typeGroup = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Rapor türü' });
+  const renderTypes = () => U.clear(typeGroup, Object.entries(TYPES).map(([k, t]) =>
+    h('button', { type: 'button', role: 'radio', 'aria-checked': String(k === type), class: 'seg-item t-' + k + (k === type ? ' on' : ''), onclick: () => { type = k; renderTypes(); saveDraft(); } }, t.label)));
+  renderTypes();
+
+  const dateIn = h('input', { type: 'date', class: 'input date', value: report ? report.date : U.today(), max: U.iso(new Date(Date.now() + 86400000 * 60)), 'aria-label': 'Rapor tarihi' });
+  const ta = h('textarea', { class: 'input ta', rows: compact ? 3 : 4, placeholder: editing ? '' : 'Bugün neler yaptın? WhatsApp mesajını da buraya yapıştırabilirsin. Ekran görüntüsünü Ctrl+V ile ekleyebilirsin.', 'aria-label': 'Rapor metni' });
+  ta.value = report ? report.raw_text || '' : (draft && draft.text) || '';
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight + 2, 420) + 'px'; };
+  ta.addEventListener('input', () => { grow(); saveDraft(); });
+  setTimeout(grow, 0);
+
+  const thumbs = h('div', { class: 'thumbs edit' });
+  const renderThumbs = () => {
+    U.clear(thumbs,
+      keepImages.map((p) => h('figure', { class: 'thumb' }, h('img', { 'data-path': p, alt: '' }), h('button', { type: 'button', class: 'thumb-x', 'aria-label': 'Görseli kaldır', onclick: () => { keepImages = keepImages.filter((x) => x !== p); renderThumbs(); } }, '✕'))),
+      newImages.map((n, i) => h('figure', { class: 'thumb' }, h('img', { src: n.url, alt: '' }), h('button', { type: 'button', class: 'thumb-x', 'aria-label': 'Görseli kaldır', onclick: () => { URL.revokeObjectURL(n.url); newImages.splice(i, 1); renderThumbs(); } }, '✕'))));
+    fillImages(thumbs);
+  };
+  const addFiles = (files) => {
+    [...files].forEach((f) => { if (f && f.type && f.type.startsWith('image/')) newImages.push({ blob: f, url: URL.createObjectURL(f) }); });
+    renderThumbs();
+  };
+  ta.addEventListener('paste', (e) => {
+    const items = [...((e.clipboardData && e.clipboardData.items) || [])].filter((i) => i.type.startsWith('image/'));
+    if (items.length) { e.preventDefault(); addFiles(items.map((i) => i.getAsFile())); }
+  });
+  const fileIn = h('input', { type: 'file', accept: 'image/*', multiple: true, hidden: true, onchange: (e) => { addFiles(e.target.files); e.target.value = ''; } });
+
+  const linkBox = h('div', { class: 'links-edit' });
+  const renderLinks = () => U.clear(linkBox, links.map((v, i) => h('div', { class: 'link-row' },
+    h('input', { class: 'input', type: 'url', inputmode: 'url', placeholder: 'Bağlantı (örn. drive.google.com/...)', value: v, 'aria-label': 'Bağlantı ' + (i + 1), oninput: (e) => { links[i] = e.target.value; saveDraft(); } }),
+    h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Bağlantıyı kaldır', onclick: () => { links.splice(i, 1); renderLinks(); saveDraft(); } }, '✕'))));
+  renderLinks();
+
+  const msg = h('div', { class: 'form-msg', role: 'status' });
+  const saveBtn = U.btn(editing ? 'Değişiklikleri kaydet' : 'Raporu kaydet', { variant: 'primary' });
+
+  async function save() {
+    msg.textContent = ''; msg.className = 'form-msg';
+    const text = ta.value.trim();
+    const cleanLinks = links.map((l) => l.trim()).filter(Boolean).map(U.normalizeUrl);
+    const bad = cleanLinks.find((l) => !U.safeUrl(l));
+    if (bad) { msg.textContent = 'Bu bağlantı geçerli görünmüyor: ' + bad; msg.classList.add('err'); return; }
+    if (!text && !newImages.length && !keepImages.length && !cleanLinks.length) { msg.textContent = 'Kaydetmek için bir şey yaz, görsel ya da bağlantı ekle.'; msg.classList.add('err'); ta.focus(); return; }
+    const date = dateIn.value || U.today();
+    if (!editing && !newImages.length && !cleanLinks.length && S.reports.some((r) => r.member_id === memberId && r.date === date && U.norm(r.raw_text) === U.norm(text))) {
+      msg.textContent = 'Bu mesaj bu tarihle zaten kayıtlı, tekrar eklenmedi.'; msg.classList.add('err'); return;
+    }
+    await U.busy(saveBtn, async () => {
+      try {
+        const uploaded = [];
+        for (let i = 0; i < newImages.length; i++) {
+          saveBtn.textContent = 'Görseller yükleniyor (' + (i + 1) + '/' + newImages.length + ')…';
+          const blob = await U.compressImage(newImages[i].blob);
+          const path = await API.uploadImage(memberId, blob);
+          S.urls[path] = newImages[i].url;
+          uploaded.push(path);
+        }
+        const fields = { date, type, raw_text: text, links: cleanLinks, images: [...keepImages, ...uploaded] };
+        let saved;
+        if (editing) {
+          saved = await API.updateReport(report.id, fields);
+          const removed = oldImages.filter((p) => !keepImages.includes(p));
+          if (removed.length) API.removeImages(removed).catch(() => {});
+          S.reports = S.reports.map((r) => (r.id === saved.id ? saved : r));
+          U.toast('Rapor güncellendi.');
+        } else {
+          saved = await API.addReport({ member_id: memberId, ...fields });
+          S.reports.unshift(saved);
+          try { localStorage.removeItem(draftKey); } catch { /* */ }
+          const who = memberById(memberId);
+          U.toast((isAdmin() && who ? who.name + ' için rapor' : 'Rapor') + ' kaydedildi' + (uploaded.length ? ' (' + uploaded.length + ' görsel)' : '') + '.');
+        }
+        onDone && onDone(saved);
+      } catch (e) {
+        msg.textContent = e.message; msg.classList.add('err');
+      }
+    }, 'Kaydediliyor…');
+  }
+  saveBtn.addEventListener('click', save);
+  ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); } });
+
+  const root = h('div', { class: 'composer' + (editing ? ' editing' : '') },
+    h('div', { class: 'comp-top' }, typeGroup, h('label', { class: 'date-wrap' }, h('span', { class: 'sr' }, 'Tarih'), dateIn)),
+    ta,
+    thumbs,
+    linkBox,
+    h('div', { class: 'comp-foot' },
+      h('div', { class: 'comp-tools' },
+        U.btn('Görsel ekle', { variant: 'ghost', small: true, onclick: () => fileIn.click() }), fileIn,
+        U.btn('Bağlantı ekle', { variant: 'ghost', small: true, onclick: () => { links.push(''); renderLinks(); linkBox.lastChild.querySelector('input').focus(); } }),
+      ),
+      h('div', { class: 'comp-save' }, editing ? U.btn('Vazgeç', { variant: 'ghost', onclick: () => onDone && onDone(null) }) : h('span', { class: 'hint' }, 'Ctrl+Enter ile kaydet'), saveBtn)),
+    msg,
+  );
+  root.addEventListener('dragover', (e) => { e.preventDefault(); root.classList.add('drop'); });
+  root.addEventListener('dragleave', () => root.classList.remove('drop'));
+  root.addEventListener('drop', (e) => { e.preventDefault(); root.classList.remove('drop'); addFiles(e.dataTransfer.files); });
+  renderThumbs();
+  root.focusText = () => ta.focus();
+  return root;
+}
+
+function editReport(r) {
+  const d = U.dialog('Raporu düzenle', composer({ memberId: r.member_id, report: r, onDone: (saved) => { d.close(); if (saved) Router.refresh(); } }), { wide: true });
+}
+
+// =====================================================================
+// ZAMAN ÇİZGİSİ (günlere göre gruplanmış rapor listesi)
+// =====================================================================
+function timeline(reports, { showName = true, emptyText = 'Henüz rapor yok.', limit } = {}) {
+  const { h } = U;
+  const root = h('div', { class: 'timeline' });
+  if (!reports.length) { root.appendChild(h('div', { class: 'empty' }, emptyText)); return root; }
+  const list = limit ? reports.slice(0, limit) : reports;
+  const groups = new Map();
+  list.forEach((r) => { if (!groups.has(r.date)) groups.set(r.date, []); groups.get(r.date).push(r); });
+  for (const [date, items] of groups) {
+    const d = U.parse(date);
+    root.appendChild(h('section', { class: 'day' },
+      h('header', { class: 'day-head' },
+        h('span', { class: 'day-num' }, String(d.getDate())),
+        h('span', { class: 'day-meta' }, h('strong', null, U.relDay(date)), h('span', null, U.MONTHS[d.getMonth()] + ' ' + d.getFullYear()))),
+      h('div', { class: 'day-items' }, items.map((r) => entry(r, showName)))));
+  }
+  fillImages(root);
+  return root;
+}
+
+function entry(r, showName) {
+  const { h } = U;
+  const m = memberById(r.member_id);
+  const text = h('div', { class: 'entry-text' }, U.linkify(r.raw_text || ''));
+  const long = (r.raw_text || '').length > 420 || (r.raw_text || '').split('\n').length > 7;
+  if (long) text.classList.add('clamp');
+  const canEdit = isAdmin() || (S.me && r.member_id === S.me.id);
+  const star = isAdmin()
+    ? h('button', { class: 'star' + (r.important ? ' on' : ''), 'aria-pressed': String(!!r.important), title: r.important ? 'Önemli işaretini kaldır' : 'Önemli olarak işaretle', 'aria-label': 'Önemli', onclick: async (e) => {
+      const b = e.currentTarget; b.disabled = true;
+      try { const s = await API.updateReport(r.id, { important: !r.important }); Object.assign(r, s); S.reports = S.reports.map((x) => (x.id === s.id ? s : x)); b.classList.toggle('on', s.important); b.setAttribute('aria-pressed', String(s.important)); b.closest('.entry').classList.toggle('important', s.important); }
+      catch (err) { U.toast(err.message, 'err'); } finally { b.disabled = false; }
+    } }, '★')
+    : (r.important ? h('span', { class: 'star on static', title: 'Yönetici önemli olarak işaretledi' }, '★') : null);
+  return h('article', { class: 'entry' + (r.important ? ' important' : ''), style: { '--who': (m && m.color) || '#8A93A3' } },
+    h('div', { class: 'entry-head' },
+      showName && m ? h('a', { class: 'who', href: '#/calisan/' + m.id }, avatar(m, 22), m.name) : null,
+      r.type !== 'gunluk' ? h('span', { class: 'badge t-' + r.type }, TYPES[r.type].short) : null,
+      h('span', { class: 'entry-time', title: 'Eklenme: ' + new Date(r.created_at).toLocaleString('tr-TR') }, new Date(r.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })),
+      h('span', { class: 'grow' }),
+      star,
+      canEdit ? h('button', { class: 'link-btn', onclick: () => editReport(r) }, 'Düzenle') : null,
+      canEdit ? h('button', { class: 'link-btn danger', onclick: async () => {
+        if (!(await U.confirm('Rapor silinsin mi?', 'Bu rapor' + ((r.images || []).length ? ' ve görselleri' : '') + ' kalıcı olarak silinecek.'))) return;
+        try { await API.deleteReport(r); S.reports = S.reports.filter((x) => x.id !== r.id); U.toast('Rapor silindi.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+      } }, 'Sil') : null),
+    r.raw_text ? text : null,
+    long ? h('button', { class: 'link-btn more', onclick: (e) => { const open = text.classList.toggle('clamp'); e.target.textContent = open ? 'Devamını göster' : 'Daha az göster'; } }, 'Devamını göster') : null,
+    (r.images || []).length ? h('div', { class: 'thumbs' }, r.images.map((p, i) => h('button', { class: 'thumb', 'aria-label': 'Görseli büyüt', onclick: () => lightbox(r.images, i) }, h('img', { 'data-path': p, alt: '', loading: 'lazy' })))) : null,
+    (r.links || []).length ? h('div', { class: 'link-chips' }, r.links.map((u) => { const s = U.safeUrl(u); return s ? h('a', { class: 'chip', href: s, target: '_blank', rel: 'noopener', title: s }, U.hostOf(s)) : null; })) : null,
+  );
+}
+
+// =====================================================================
+// YAPAY ZEKÂ ÇIKTISI (metin + görsel işaretleri + bağlantılar)
+// =====================================================================
+function aiOutput(text, idToPath, title) {
+  const { h } = U;
+  const body = h('div', { class: 'ai-text' });
+  text.split(/\r?\n/).forEach((line) => {
+    const im = line.trim().match(/^\[\[IMG:(R\d+-\d+)\]\]$/);
+    if (im) { if (idToPath && idToPath[im[1]]) body.appendChild(h('img', { class: 'ai-img', 'data-path': idToPath[im[1]], alt: '' })); return; }
+    body.appendChild(h('div', { class: line.trim() === '---' ? 'ai-rule' : line.trim() ? '' : 'ai-gap' }, line.trim() === '---' ? '' : U.linkify(line)));
+  });
+  fillImages(body);
+  return h('div', { class: 'ai-out' }, body,
+    h('div', { class: 'ai-actions' },
+      U.btn('Metni kopyala', { variant: 'ghost', small: true, onclick: async () => { try { await navigator.clipboard.writeText(text.replace(/^\[\[IMG:[^\]]+\]\]$/gm, '').replace(/\n{3,}/g, '\n\n')); U.toast('Metin kopyalandı.'); } catch { U.toast('Kopyalanamadı. Metni seçip Ctrl+C ile kopyala.', 'err'); } } }),
+      U.btn('PDF olarak kaydet', { variant: 'ghost', small: true, onclick: () => Export.printPdf(title, body) })));
+}
+
+async function geminiCall(opts) {
+  const g = S.gemini || {};
+  return AI.call({ apiKey: g.apiKey, model: g.model, ...opts });
+}
+
+</script>
+<script>
+// js/views.js
+// Sayfalar ve yönlendirme
+const Router = (() => {
+  const { h } = U;
+  let main = null;
+  const routes = {};
+  const def = (name, fn) => { routes[name] = fn; };
+  function parse() {
+    const p = (location.hash.replace(/^#\/?/, '') || '').split('/');
+    return { name: p[0] || (isAdmin() ? 'bugun' : 'raporlarim'), arg: p[1] ? decodeURIComponent(p[1]) : null };
+  }
+  function render() {
+    if (!main) return;
+    const r = parse();
+    const fn = routes[r.name] && (!adminOnly.has(r.name) || isAdmin()) ? routes[r.name] : routes[isAdmin() ? 'bugun' : 'raporlarim'];
+    const scrollY = window.__keepScroll ? main.scrollTop : 0;
+    U.clear(main);
+    try { fn(main, r.arg); } catch (e) { console.error(e); main.appendChild(h('div', { class: 'empty err' }, 'Bu sayfa açılamadı: ' + e.message)); }
+    main.scrollTop = scrollY; window.__keepScroll = false;
+    Shell.markActive(r);
+    document.body.classList.remove('nav-open');
+  }
+  const adminOnly = new Set(['bugun', 'tum', 'calisan', 'degerlendirme']);
+  window.addEventListener('hashchange', render);
+  return {
+    def, render, parse,
+    mount(el) { main = el; render(); },
+    unmount() { main = null; },
+    refresh() { window.__keepScroll = true; Shell.update(); render(); },
+    go(hash) { if (location.hash === hash) render(); else location.hash = hash; },
+  };
+})();
+
+function pageHead(title, sub, ...actions) {
+  const { h } = U;
+  return h('header', { class: 'page-head' },
+    h('div', null, h('h1', null, title), sub ? h('p', { class: 'sub' }, sub) : null),
+    actions.length ? h('div', { class: 'page-actions' }, actions) : null);
+}
+function section(title, ...kids) {
+  const { h } = U;
+  return h('section', { class: 'block' }, title ? h('h2', { class: 'block-title' }, title) : null, kids);
+}
+
+// ---------------------------------------------------------------------
+// YAN MENÜ
+// ---------------------------------------------------------------------
+const Shell = (() => {
+  const { h } = U;
+  let nav = null, userBox = null;
+  function navItem(hash, label, extra) {
+    return h('a', { class: 'nav-item', href: hash, 'data-hash': hash }, h('span', { class: 'nav-label' }, label), extra || null);
+  }
+  function build(root) {
+    nav = h('nav', { class: 'nav', 'aria-label': 'Ana menü' });
+    userBox = h('div', { class: 'side-foot' });
+    const side = h('aside', { class: 'side' },
+      h('div', { class: 'brand' }, h('span', { class: 'brand-mark', 'aria-hidden': 'true' }), h('span', null, 'Rapor Defteri')),
+      nav, userBox);
+    const main = h('main', { class: 'main', id: 'main', tabindex: '-1' });
+    const top = h('div', { class: 'topbar' },
+      h('button', { class: 'icon-btn', 'aria-label': 'Menüyü aç', onclick: () => document.body.classList.toggle('nav-open') }, '☰'),
+      h('span', { class: 'brand small' }, h('span', { class: 'brand-mark', 'aria-hidden': 'true' }), 'Rapor Defteri'));
+    const scrim = h('div', { class: 'scrim', onclick: () => document.body.classList.remove('nav-open') });
+    U.clear(root, API.mode === 'demo' ? demoBanner() : null, h('div', { class: 'app' }, side, scrim, h('div', { class: 'main-col' }, top, main)));
+    update();
+    return main;
+  }
+  function demoBanner() {
+    return h('div', { class: 'demo-bar' }, 'Deneme modundasın. Veriler yalnızca bu tarayıcıda duruyor.',
+      h('button', { class: 'link-btn', onclick: async () => { if (await U.confirm('Örnek veriler sıfırlansın mı?', 'Deneme modunda eklediğin her şey silinip örnek veriler geri yüklenecek.', 'Sıfırla')) API.resetDemo(); } }, 'Örnek verileri sıfırla'));
+  }
+  function update() {
+    if (!nav) return;
+    const items = [];
+    if (isAdmin()) {
+      const sent = S.employees.filter((e) => reportedToday(e.id)).length;
+      items.push(navItem('#/bugun', 'Bugün', h('span', { class: 'nav-count', title: 'Bugün rapor gönderen' }, sent + '/' + S.employees.length)));
+      items.push(navItem('#/tum', 'Tüm raporlar'));
+      items.push(navItem('#/ekip', 'Ekip notları'));
+      items.push(navItem('#/degerlendirme', 'Değerlendirme'));
+      items.push(h('div', { class: 'nav-group' }, 'Çalışanlar'));
+      if (!S.employees.length) items.push(h('a', { class: 'nav-item muted', href: '#/ayarlar' }, 'Çalışan ekle'));
+      S.employees.forEach((e) => items.push(h('a', { class: 'nav-item person', href: '#/calisan/' + e.id, 'data-hash': '#/calisan/' + e.id },
+        avatar(e, 24), h('span', { class: 'nav-label' }, e.name),
+        h('span', { class: 'today-dot' + (reportedToday(e.id) ? ' on' : ''), title: reportedToday(e.id) ? 'Bugün rapor gönderdi' : 'Bugün henüz rapor yok' }))));
+    } else {
+      items.push(navItem('#/raporlarim', 'Raporlarım'));
+      items.push(navItem('#/ekip', 'Ekip notları'));
+    }
+    U.clear(nav, items);
+    U.clear(userBox,
+      h('a', { class: 'nav-item', href: '#/ayarlar', 'data-hash': '#/ayarlar' }, h('span', { class: 'nav-label' }, 'Ayarlar')),
+      h('div', { class: 'me' }, avatar(S.me, 30),
+        h('div', { class: 'me-text' }, h('strong', null, S.me.name), h('span', null, isAdmin() ? 'Yönetici' : 'Çalışan')),
+        h('button', { class: 'link-btn', onclick: () => API.signOut() }, 'Çıkış')));
+    markActive(Router.parse());
+  }
+  function markActive(r) {
+    if (!nav) return;
+    const hash = '#/' + r.name + (r.arg ? '/' + r.arg : '');
+    document.querySelectorAll('.nav-item[data-hash]').forEach((a) => {
+      const on = a.dataset.hash === hash; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+  }
+  return { build, update, markActive };
+})();
+
+// ---------------------------------------------------------------------
+// BUGÜN (yönetici ana sayfası)
+// ---------------------------------------------------------------------
+Router.def('bugun', (main) => {
+  const { h } = U;
+  const t = U.today();
+  const emps = S.employees;
+  const sent = emps.filter((e) => reportedToday(e.id));
+  const missing = emps.filter((e) => !reportedToday(e.id));
+  const w = U.weekRange(0);
+  const all7 = [0, 1, 2, 3, 4, 5, 6].map((i) => { const d = U.parse(w.from); d.setDate(d.getDate() + i); return U.iso(d); });
+  const weekendUsed = t > all7[4] || S.reports.some((r) => r.date === all7[5] || r.date === all7[6]);
+  const days = weekendUsed ? all7 : all7.slice(0, 5);
+
+  let summary;
+  if (!emps.length) summary = 'Ekipte henüz çalışan yok. Ayarlar sayfasından ekleyebilirsin.';
+  else if (!sent.length) summary = 'Bugün henüz kimse rapor göndermedi.';
+  else if (!missing.length) summary = 'Bugün herkes rapor gönderdi.';
+  else summary = emps.length + ' çalışandan ' + sent.length + ' kişi bugün rapor gönderdi.';
+
+  const lastBackup = S.backup && S.backup.last;
+  const backupOld = S.reports.length > 0 && (!lastBackup || (Date.now() - new Date(lastBackup).getTime()) > 30 * 86400000);
+
+  main.append(
+    pageHead('Bugün', U.trDate(t) + ', ' + U.weekday(t)),
+    backupOld ? h('div', { class: 'notice' }, (lastBackup ? 'Son yedek ' + U.trDate(lastBackup.slice(0, 10)) + ' tarihinde alındı.' : 'Henüz yedek alınmadı.') + ' Ayda bir Excel yedeği almanı öneririm.', U.btn('Yedek al', { small: true, variant: 'ghost', onclick: () => Router.go('#/ayarlar') })) : null,
+    h('p', { class: 'lede' }, summary),
+    emps.length ? h('div', { class: 'who-today' },
+      h('div', null, h('h2', { class: 'block-title' }, 'Gönderenler'), sent.length ? h('div', { class: 'people' }, sent.map((e) => personChip(e, reportsOf(e.id).filter((r) => r.date === t).length + ' rapor'))) : h('p', { class: 'muted' }, 'Henüz yok.')),
+      h('div', null, h('h2', { class: 'block-title' }, 'Henüz göndermeyenler'), missing.length ? h('div', { class: 'people' }, missing.map((e) => personChip(e, lastSeen(e.id)))) : h('p', { class: 'muted' }, 'Herkes gönderdi.'))) : null,
+    emps.length ? section('Bu hafta', weekGrid(emps, days)) : null,
+    section('Son raporlar', timeline(S.reports.filter((r) => r.member_id && memberById(r.member_id)), { limit: 12, emptyText: 'Henüz rapor yok. Çalışanlar giriş yapıp rapor yazdıkça burada görünecek.' }),
+      S.reports.length > 12 ? h('a', { class: 'btn ghost', href: '#/tum' }, 'Tüm raporları gör') : null),
+  );
+
+  function personChip(e, sub) {
+    return h('a', { class: 'person-chip', href: '#/calisan/' + e.id }, avatar(e, 32), h('span', null, h('strong', null, e.name), h('small', null, sub)));
+  }
+  function lastSeen(id) {
+    const r = reportsOf(id).sort((a, b) => b.date.localeCompare(a.date))[0];
+    return r ? 'Son rapor: ' + U.relDay(r.date).toLocaleLowerCase('tr') + (U.relDay(r.date) === U.weekday(r.date) ? ', ' + U.shortDate(r.date) : '') : 'Hiç rapor yok';
+  }
+});
+
+function weekGrid(emps, days) {
+  const { h } = U;
+  const t = U.today();
+  return h('div', { class: 'week-wrap' }, h('table', { class: 'week' },
+    h('thead', null, h('tr', null, h('th', { scope: 'col' }, h('span', { class: 'sr' }, 'Çalışan')),
+      days.map((d) => h('th', { scope: 'col', class: d === t ? 'is-today' : '' }, U.shortDay(d), h('small', null, U.parse(d).getDate()))))),
+    h('tbody', null, emps.map((e) => h('tr', null,
+      h('th', { scope: 'row' }, h('a', { href: '#/calisan/' + e.id, class: 'who' }, avatar(e, 22), e.name)),
+      days.map((d) => {
+        const recs = S.reports.filter((r) => r.member_id === e.id && r.date === d);
+        const done = recs.some((r) => r.type === 'hazir');
+        const future = d > t;
+        return h('td', { class: (d === t ? 'is-today ' : '') + (future ? 'future' : '') },
+          recs.length ? h('span', { class: 'cell on' + (done ? ' done' : ''), style: { '--who': e.color }, title: recs.length + ' rapor' + (done ? ', tamamlanan iş var' : '') }, recs.length) :
+            h('span', { class: 'cell', title: future ? '' : 'Rapor yok' }, h('span', { class: 'sr' }, future ? '' : 'yok')));
+      }))))));
+}
+
+// ---------------------------------------------------------------------
+// ÇALIŞAN SAYFASI (yönetici) ve RAPORLARIM (çalışan)
+// ---------------------------------------------------------------------
+function personPage(main, m, own) {
+  const { h } = U;
+  const all = reportsOf(m.id);
+  let filter = 'all', onlyImp = false;
+  const listBox = h('div');
+  const renderList = () => {
+    let list = all.filter((r) => filter === 'all' || r.type === filter);
+    if (onlyImp) list = list.filter((r) => r.important);
+    U.clear(listBox, timeline(list, { showName: false, emptyText: all.length ? 'Bu filtreye uyan rapor yok.' : (own ? 'Henüz rapor yazmadın. İlk raporunu yukarıdan ekleyebilirsin.' : 'Bu çalışanın henüz raporu yok.') }));
+  };
+  const chips = h('div', { class: 'filters' });
+  const renderChips = () => U.clear(chips,
+    [['all', 'Hepsi'], ['gunluk', 'Günlük'], ['hazir', 'Tamamlanan'], ['gelecek_hafta', 'Gelecek hafta']].map(([k, l]) =>
+      h('button', { class: 'fchip' + (filter === k ? ' on' : ''), 'aria-pressed': String(filter === k), onclick: () => { filter = k; renderChips(); renderList(); } }, l, h('small', null, k === 'all' ? all.length : all.filter((r) => r.type === k).length))),
+    h('button', { class: 'fchip star-chip' + (onlyImp ? ' on' : ''), 'aria-pressed': String(onlyImp), onclick: () => { onlyImp = !onlyImp; renderChips(); renderList(); } }, '★ Önemliler', h('small', null, all.filter((r) => r.important).length)));
+  renderChips(); renderList();
+
+  const todayCount = all.filter((r) => r.date === U.today()).length;
+  const sub = own
+    ? (todayCount ? 'Bugün ' + todayCount + ' rapor yazdın.' : 'Bugün henüz rapor yazmadın.')
+    : (m.email + (m.user_id ? '' : ' (henüz hesap açmadı)'));
+  main.append(
+    h('header', { class: 'page-head person-head', style: { '--who': m.color } }, avatar(m, 48),
+      h('div', null, h('h1', null, own ? 'Merhaba ' + m.name.split(' ')[0] : m.name), h('p', { class: 'sub' }, sub))),
+    section(own ? 'Yeni rapor' : m.name.split(' ')[0] + ' için rapor ekle', composer({ memberId: m.id, onDone: () => Router.refresh() })),
+    section('Raporlar', chips, listBox),
+  );
+}
+Router.def('calisan', (main, id) => {
+  const m = memberById(id);
+  if (!m) { main.append(pageHead('Çalışan bulunamadı'), U.h('p', { class: 'muted' }, 'Bu kişi listeden çıkarılmış olabilir.')); return; }
+  personPage(main, m, false);
+});
+Router.def('raporlarim', (main) => personPage(main, S.me, true));
+
+// ---------------------------------------------------------------------
+// TÜM RAPORLAR (filtreli)
+// ---------------------------------------------------------------------
+const allFilters = { q: '', member: '', type: '', from: '', to: '', imp: false };
+Router.def('tum', (main) => {
+  const { h } = U;
+  const f = allFilters;
+  const listBox = h('div');
+  const countEl = h('span', { class: 'muted' });
+  const apply = () => {
+    const q = U.norm(f.q);
+    const list = S.reports.filter((r) => memberById(r.member_id)
+      && (!f.member || r.member_id === f.member) && (!f.type || r.type === f.type)
+      && AI.inRange(r.date, f.from, f.to) && (!f.imp || r.important)
+      && (!q || U.norm(r.raw_text).includes(q) || (r.links || []).some((l) => U.norm(l).includes(q))));
+    countEl.textContent = list.length + ' rapor';
+    U.clear(listBox, timeline(list, { emptyText: S.reports.length ? 'Bu filtrelere uyan rapor yok.' : 'Henüz rapor yok.' }));
+  };
+  const inp = (attrs, key) => { const el = h(attrs.tag || 'input', { class: 'input', ...attrs, tag: null }); el.value = f[key]; el.addEventListener('input', () => { f[key] = el.value; apply(); }); return el; };
+  const memberSel = inp({ tag: 'select', 'aria-label': 'Çalışan' }, 'member');
+  U.append(memberSel, [h('option', { value: '' }, 'Tüm çalışanlar'), S.members.filter((m) => m.role === 'employee' || reportsOf(m.id).length).map((m) => h('option', { value: m.id }, m.name + (m.active ? '' : ' (listeden çıkarıldı)')))]);
+  memberSel.value = f.member;
+  const typeSel = inp({ tag: 'select', 'aria-label': 'Tür' }, 'type');
+  U.append(typeSel, [h('option', { value: '' }, 'Tüm türler'), Object.entries(TYPES).map(([k, t]) => h('option', { value: k }, t.label))]);
+  typeSel.value = f.type;
+  const imp = h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: f.imp, onchange: (e) => { f.imp = e.target.checked; apply(); } }), '★ Sadece önemliler');
+  main.append(
+    pageHead('Tüm raporlar', null, countEl),
+    h('div', { class: 'filter-bar' },
+      inp({ type: 'search', placeholder: 'Raporlarda ara', 'aria-label': 'Raporlarda ara', class: 'input search' }, 'q'),
+      memberSel, typeSel,
+      h('div', { class: 'range' }, inp({ type: 'date', 'aria-label': 'Başlangıç tarihi' }, 'from'), h('span', null, '–'), inp({ type: 'date', 'aria-label': 'Bitiş tarihi' }, 'to')),
+      imp,
+      U.btn('Temizle', { variant: 'ghost', small: true, onclick: () => { Object.assign(f, { q: '', member: '', type: '', from: '', to: '', imp: false }); Router.render(); } })),
+    listBox);
+  apply();
+});
+
+// ---------------------------------------------------------------------
+// EKİP NOTLARI
+// ---------------------------------------------------------------------
+Router.def('ekip', (main) => {
+  const { h } = U;
+  main.append(pageHead('Ekip notları', isAdmin() ? 'Toplantı notları ve gelecek hafta etkinlikleri. Çalışanlar bu notları okuyabilir.' : 'Toplantı notları ve gelecek hafta etkinlikleri.'));
+  if (isAdmin()) {
+    let type = 'toplanti';
+    const seg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Not türü' });
+    const renderSeg = () => U.clear(seg, Object.entries(NOTE_TYPES).map(([k, l]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(k === type), class: 'seg-item n-' + k + (k === type ? ' on' : ''), onclick: () => { type = k; renderSeg(); } }, l)));
+    renderSeg();
+    const date = h('input', { type: 'date', class: 'input date', value: U.today(), 'aria-label': 'Not tarihi' });
+    const ta = h('textarea', { class: 'input ta', rows: 3, placeholder: 'Toplantıda konuşulanları ya da gelecek hafta yapılacak etkinliği yaz.', 'aria-label': 'Not metni' });
+    const msg = h('div', { class: 'form-msg' });
+    const save = U.btn('Notu kaydet', { variant: 'primary', onclick: async (e) => {
+      const text = ta.value.trim(); if (!text) { msg.textContent = 'Not boş olamaz.'; msg.className = 'form-msg err'; return; }
+      await U.busy(e.currentTarget, async () => {
+        try { const n = await API.addNote({ date: date.value || U.today(), type, text }); S.notes.unshift(n); U.toast(NOTE_TYPES[type] + ' kaydedildi.'); Router.refresh(); }
+        catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+      }, 'Kaydediliyor…');
+    } });
+    main.append(section('Yeni not', h('div', { class: 'composer' }, h('div', { class: 'comp-top' }, seg, date), ta, h('div', { class: 'comp-foot' }, h('span'), save), msg)));
+  }
+  const notes = S.notes.slice().sort((a, b) => b.date.localeCompare(a.date));
+  const list = h('div', { class: 'timeline' });
+  if (!notes.length) list.appendChild(h('div', { class: 'empty' }, isAdmin() ? 'Henüz ekip notu yok. Yukarıdan ilk notu ekleyebilirsin.' : 'Henüz ekip notu yok.'));
+  const groups = new Map(); notes.forEach((n) => { if (!groups.has(n.date)) groups.set(n.date, []); groups.get(n.date).push(n); });
+  for (const [d, items] of groups) {
+    const dt = U.parse(d);
+    list.appendChild(h('section', { class: 'day' },
+      h('header', { class: 'day-head' }, h('span', { class: 'day-num' }, dt.getDate()), h('span', { class: 'day-meta' }, h('strong', null, U.relDay(d)), h('span', null, U.MONTHS[dt.getMonth()] + ' ' + dt.getFullYear()))),
+      h('div', { class: 'day-items' }, items.map((n) => h('article', { class: 'entry note n-' + n.type },
+        h('div', { class: 'entry-head' }, h('span', { class: 'badge n-' + n.type }, NOTE_TYPES[n.type]), h('span', { class: 'grow' }),
+          isAdmin() ? h('button', { class: 'link-btn danger', onclick: async () => {
+            if (!(await U.confirm('Not silinsin mi?', 'Bu ekip notu kalıcı olarak silinecek.'))) return;
+            try { await API.deleteNote(n.id); S.notes = S.notes.filter((x) => x.id !== n.id); U.toast('Not silindi.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+          } }, 'Sil') : null),
+        h('div', { class: 'entry-text' }, U.linkify(n.text)))))));
+  }
+  main.append(section(notes.length ? 'Notlar' : null, list));
+});
+
+// ---------------------------------------------------------------------
+// DEĞERLENDİRME (Gemini)
+// ---------------------------------------------------------------------
+const evalState = { weekly: null, ask: null, range: 'this', from: '', to: '', askFrom: '', askTo: '' };
+Router.def('degerlendirme', (main) => {
+  const { h } = U;
+  const noKey = !(S.gemini && S.gemini.apiKey);
+  main.append(pageHead('Değerlendirme', 'Raporlardan haftalık değerlendirme ve analiz hazırlar. Google Gemini kullanır.'));
+  if (noKey) main.append(h('div', { class: 'notice' }, 'Bu bölüm için önce Gemini API anahtarını eklemen gerekiyor. Ücretsizdir.', h('a', { class: 'btn small ghost', href: '#/ayarlar' }, 'Anahtarı ekle')));
+
+  // ---- haftalık ----
+  const wOut = h('div', { 'aria-live': 'polite' });
+  if (evalState.weekly) wOut.appendChild(aiOutput(evalState.weekly.text, null, evalState.weekly.title));
+  const rangeSeg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Dönem' });
+  const custom = h('div', { class: 'range' },
+    h('input', { type: 'date', class: 'input', value: evalState.from, 'aria-label': 'Başlangıç', oninput: (e) => { evalState.from = e.target.value; } }), h('span', null, '–'),
+    h('input', { type: 'date', class: 'input', value: evalState.to, 'aria-label': 'Bitiş', oninput: (e) => { evalState.to = e.target.value; } }));
+  const renderSeg = () => {
+    U.clear(rangeSeg, [['this', 'Bu hafta'], ['last', 'Geçen hafta'], ['custom', 'Tarih seç']].map(([k, l]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(evalState.range === k), class: 'seg-item' + (evalState.range === k ? ' on' : ''), onclick: () => { evalState.range = k; renderSeg(); } }, l)));
+    custom.hidden = evalState.range !== 'custom';
+  };
+  renderSeg();
+  const wBtn = U.btn('Değerlendirmeyi oluştur', { variant: 'primary', disabled: noKey, onclick: async () => {
+    let from, to;
+    if (evalState.range === 'custom') { from = evalState.from; to = evalState.to; if (!from && !to) { U.toast('Bir tarih aralığı seç.', 'err'); return; } }
+    else { const w = U.weekRange(evalState.range === 'last' ? -1 : 0); from = w.from; to = w.sun; }
+    const label = (from ? U.shortDate(from) : 'başlangıç') + ' – ' + (to ? U.shortDate(to) : 'bugün');
+    const data = AI.weeklyData(S, from, to);
+    if (data.empty) { U.clear(wOut, h('div', { class: 'notice' }, label + ' aralığında hiç rapor ya da ekip notu yok.')); return; }
+    U.clear(wOut, h('div', { class: 'thinking' }, 'Değerlendirme hazırlanıyor…'));
+    await U.busy(wBtn, async () => {
+      try {
+        const text = await geminiCall({ system: AI.WEEKLY_SYSTEM, text: 'DÖNEM: ' + label + '\n\nVERI (JSON):\n' + JSON.stringify({ calisanlar: data.calisanlar, ekip: data.ekip }), maxTokens: 16000 });
+        evalState.weekly = { text, title: 'Haftalık Ekip Değerlendirmesi, ' + label };
+        U.clear(wOut, aiOutput(text, null, evalState.weekly.title));
+      } catch (e) { U.clear(wOut, h('div', { class: 'notice err' }, e.message)); }
+    }, 'Hazırlanıyor…');
+  } });
+
+  // ---- serbest soru ----
+  const aOut = h('div', { 'aria-live': 'polite' });
+  if (evalState.ask) aOut.appendChild(aiOutput(evalState.ask.text, evalState.ask.idToPath, evalState.ask.title));
+  const q = h('textarea', { class: 'input ta', rows: 2, placeholder: 'Örn: Bu hafta kim hangi işi tamamladı?', 'aria-label': 'Soru' });
+  const withImg = h('input', { type: 'checkbox', checked: true });
+  const quick = ['Bu haftayı özetle', 'Önemli notları özetle', 'Kim hangi işi tamamladı?', 'Gelecek hafta planlarını listele'];
+  const askBtn = U.btn('Sor', { variant: 'primary', disabled: noKey, onclick: async () => {
+    const question = q.value.trim(); if (!question) { q.focus(); return; }
+    U.clear(aOut, h('div', { class: 'thinking' }, 'Raporlar inceleniyor…'));
+    await U.busy(askBtn, async () => {
+      try {
+        const { allData, idToPath, imageParts } = await AI.promptData(S, evalState.askFrom, evalState.askTo, { withImages: withImg.checked });
+        if (!Object.keys(allData).length) { U.clear(aOut, h('div', { class: 'notice' }, 'Bu tarih aralığında rapor yok.')); return; }
+        let text = 'KAYITLAR:\n' + JSON.stringify(allData) + '\n\nSORU: ' + question;
+        if (evalState.askFrom || evalState.askTo) text += '\n\n(Kayıtlar ' + (evalState.askFrom || 'başlangıç') + ' – ' + (evalState.askTo || 'bugün') + ' aralığına göre filtrelendi.)';
+        const out = await geminiCall({ system: AI.ASK_SYSTEM, text, images: imageParts });
+        evalState.ask = { text: out, idToPath, title: 'Analiz: ' + question };
+        U.clear(aOut, aiOutput(out, idToPath, evalState.ask.title));
+      } catch (e) { U.clear(aOut, h('div', { class: 'notice err' }, e.message)); }
+    }, 'Düşünüyor…');
+  } });
+
+  main.append(
+    section('Haftalık ekip değerlendirmesi',
+      h('p', { class: 'muted' }, 'Seçilen dönemdeki raporları ve ekip notlarını gün gün, kişi kişi bir rapora dönüştürür.'),
+      h('div', { class: 'row' }, rangeSeg, custom, wBtn), wOut),
+    section('Raporlara soru sor',
+      h('div', { class: 'quick' }, quick.map((t) => h('button', { class: 'fchip', onclick: () => { q.value = t; q.focus(); } }, t))),
+      q,
+      h('div', { class: 'row' },
+        h('div', { class: 'range' }, h('span', { class: 'muted' }, 'Tarih aralığı'),
+          h('input', { type: 'date', class: 'input', value: evalState.askFrom, 'aria-label': 'Başlangıç', oninput: (e) => { evalState.askFrom = e.target.value; } }), h('span', null, '–'),
+          h('input', { type: 'date', class: 'input', value: evalState.askTo, 'aria-label': 'Bitiş', oninput: (e) => { evalState.askTo = e.target.value; } })),
+        h('label', { class: 'check' }, withImg, 'Görselleri de incelesin'),
+        askBtn),
+      aOut),
+  );
+});
+
+</script>
+<script>
+// js/settings.js
+// Ayarlar: ekip, yapay zekâ, yedekleme, görünüm, hesap
+const Theme = (() => {
+  const KEY = 'rd-theme';
+  const get = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  function apply(t = get()) {
+    const mode = t.mode || 'light';
+    const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    if (t.accent) document.documentElement.style.setProperty('--accent', t.accent); else document.documentElement.style.removeProperty('--accent');
+  }
+  function set(patch) { const t = { ...get(), ...patch }; try { localStorage.setItem(KEY, JSON.stringify(t)); } catch { /* */ } apply(t); }
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => apply());
+  return { get, apply, set };
+})();
+
+function appLink() {
+  return /^https?:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname) ? location.origin + location.pathname : '';
+}
+
+function inviteText(m) {
+  const link = appLink();
+  return 'Merhaba ' + m.name.split(' ')[0] + ', rapor defterine erişimin açıldı.\n\n'
+    + '1. ' + (link || '[uygulama bağlantısı]') + ' adresini aç.\n'
+    + '2. "Hesap oluştur"a tıkla ve ' + m.email + ' adresiyle kendi şifreni belirle.\n'
+    + '3. Günlük raporlarını oradan yazabilirsin. Telefonda tarayıcı menüsünden "Ana ekrana ekle" dersen uygulama gibi açılır.';
+}
+
+function memberDialog(m) {
+  const { h } = U;
+  const isNew = !m;
+  m = m ? { ...m } : { name: '', email: '', role: 'employee', color: PALETTE[S.members.length % PALETTE.length], avatar: null, active: true };
+  const name = h('input', { class: 'input', value: m.name, required: true, autocomplete: 'off', id: 'm-name' });
+  const email = h('input', { class: 'input', type: 'email', value: m.email, required: true, autocomplete: 'off', id: 'm-email', disabled: !isNew && !!m.user_id && API.mode === 'remote' });
+  const role = h('select', { class: 'input', id: 'm-role' }, h('option', { value: 'employee' }, 'Çalışan: kendi raporlarını yazar ve görür'), h('option', { value: 'admin' }, 'Yönetici: her şeyi görür ve yönetir'));
+  role.value = m.role;
+  const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Renk' });
+  const renderSw = () => U.clear(sw, PALETTE.map((c) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(m.color === c), 'aria-label': c, class: 'swatch' + (m.color === c ? ' on' : ''), style: { background: c }, onclick: () => { m.color = c; renderSw(); renderAv(); } })),
+    h('label', { class: 'swatch custom', title: 'Başka renk' }, h('input', { type: 'color', value: m.color, oninput: (e) => { m.color = e.target.value; renderSw(); renderAv(); } }), '+'));
+  const avBox = h('div', { class: 'av-edit' });
+  const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async (e) => { const f = e.target.files[0]; if (f) { m.avatar = await U.avatarFromFile(f); renderAv(); } } });
+  const renderAv = () => U.clear(avBox, avatar({ ...m, name: name.value || m.name }, 56),
+    U.btn(m.avatar ? 'Fotoğrafı değiştir' : 'Fotoğraf ekle', { small: true, variant: 'ghost', onclick: () => fileIn.click() }),
+    m.avatar ? U.btn('Kaldır', { small: true, variant: 'ghost', onclick: () => { m.avatar = null; renderAv(); } }) : null, fileIn);
+  name.addEventListener('input', renderAv);
+  renderSw(); renderAv();
+  const msg = h('div', { class: 'form-msg' });
+  const field = (label, el, help) => h('div', { class: 'field' }, h('label', { for: el.id }, label), el, help ? h('small', null, help) : null);
+  const saveBtn = U.btn(isNew ? 'Ekle' : 'Kaydet', { variant: 'primary', type: 'submit' });
+  const form = h('form', { class: 'form', onsubmit: async (e) => {
+    e.preventDefault();
+    await U.busy(saveBtn, async () => {
+      try {
+        const saved = await API.saveMember({ ...m, name: name.value, email: email.value, role: role.value });
+        d.close();
+        await loadData();
+        U.toast(isNew ? saved.name + ' ekibe eklendi.' : 'Bilgiler kaydedildi.');
+        if (isNew) inviteDialog(saved); else Router.refresh();
+      } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+    });
+  } },
+    avBox,
+    field('Ad soyad', name),
+    field('E-posta', email, isNew ? 'Kişi bu e-postayla hesap açacak.' : (m.user_id && API.mode === 'remote' ? 'Hesap açıldığı için e-posta değiştirilemez.' : null)),
+    field('Yetki', role),
+    h('div', { class: 'field' }, h('span', { class: 'label' }, 'Renk'), sw),
+    msg,
+    h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), saveBtn));
+  const d = U.dialog(isNew ? 'Kişi ekle' : m.name, form);
+  setTimeout(() => name.focus(), 50);
+}
+
+function inviteDialog(m) {
+  const { h } = U;
+  const text = inviteText(m);
+  const pre = h('pre', { class: 'invite' }, text);
+  const d = U.dialog(m.name + ' için davet', h('div', null,
+    h('p', null, 'Bu mesajı WhatsApp ya da e-postayla gönder. ' + m.name.split(' ')[0] + ' bağlantıyı açıp kendi şifresini belirleyecek.'),
+    pre,
+    appLink() ? null : h('p', { class: 'muted' }, 'Uygulamayı yayınladığın adresten açtığında bağlantı mesaja kendiliğinden eklenir.')), {
+    actions: [U.btn('Kapat', { variant: 'ghost', onclick: () => d.close() }),
+      U.btn('Mesajı kopyala', { variant: 'primary', onclick: async () => { try { await navigator.clipboard.writeText(text); U.toast('Davet mesajı kopyalandı.'); } catch { U.toast('Kopyalanamadı. Metni seçip Ctrl+C ile kopyala.', 'err'); } } })],
+    onClose: () => Router.refresh(),
+  });
+}
+
+function passwordDialog(title = 'Şifreni değiştir') {
+  const { h } = U;
+  const p1 = h('input', { class: 'input', type: 'password', autocomplete: 'new-password', id: 'pw1', minlength: 6, required: true });
+  const p2 = h('input', { class: 'input', type: 'password', autocomplete: 'new-password', id: 'pw2', required: true });
+  const msg = h('div', { class: 'form-msg' });
+  const b = U.btn('Şifreyi kaydet', { variant: 'primary', type: 'submit' });
+  const d = U.dialog(title, h('form', { class: 'form', onsubmit: async (e) => {
+    e.preventDefault();
+    if (p1.value.length < 6) { msg.textContent = 'Şifre en az 6 karakter olmalı.'; msg.className = 'form-msg err'; return; }
+    if (p1.value !== p2.value) { msg.textContent = 'Şifreler aynı değil.'; msg.className = 'form-msg err'; return; }
+    await U.busy(b, async () => {
+      try { await API.updatePassword(p1.value); d.close(); U.toast('Şifren değiştirildi.'); } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+    });
+  } },
+    h('div', { class: 'field' }, h('label', { for: 'pw1' }, 'Yeni şifre'), p1, h('small', null, 'En az 6 karakter.')),
+    h('div', { class: 'field' }, h('label', { for: 'pw2' }, 'Yeni şifre (tekrar)'), p2),
+    msg, h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), b)));
+}
+
+Router.def('ayarlar', (main) => {
+  const { h } = U;
+  main.append(pageHead('Ayarlar'));
+
+  // ---- ekip ----
+  if (isAdmin()) {
+    const active = S.members.filter((m) => m.active).sort((a, b) => (a.role === b.role ? a.name.localeCompare(b.name, 'tr') : a.role === 'admin' ? -1 : 1));
+    const passive = S.members.filter((m) => !m.active);
+    const row = (m) => h('tr', { class: m.active ? '' : 'passive' },
+      h('td', null, h('div', { class: 'who' }, avatar(m, 30), h('div', null, h('strong', null, m.name), h('small', null, m.email)))),
+      h('td', null, m.role === 'admin' ? 'Yönetici' : 'Çalışan'),
+      h('td', null, !m.active ? h('span', { class: 'status off' }, 'Listeden çıkarıldı') : m.user_id ? h('span', { class: 'status ok' }, 'Hesap açtı') : h('span', { class: 'status wait' }, 'Davet bekliyor')),
+      h('td', { class: 'actions' },
+        m.active && !m.user_id ? U.btn('Davet', { small: true, variant: 'ghost', onclick: () => inviteDialog(m) }) : null,
+        U.btn('Düzenle', { small: true, variant: 'ghost', onclick: () => memberDialog(m) }),
+        m.id !== S.me.id ? U.btn(m.active ? 'Çıkar' : 'Geri al', { small: true, variant: 'ghost', onclick: async () => {
+          if (m.active && !(await U.confirm(m.name + ' listeden çıkarılsın mı?', 'Artık giriş yapamaz ve menüde görünmez. Geçmiş raporları silinmez; istediğin zaman geri alabilirsin.', 'Listeden çıkar'))) return;
+          try { await API.saveMember({ ...m, active: !m.active }); await loadData(); U.toast(m.active ? m.name + ' listeden çıkarıldı.' : m.name + ' geri alındı.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+        } }) : null));
+    main.append(section('Ekip',
+      h('p', { class: 'muted' }, 'Eklediğin kişiler kendi e-postalarıyla hesap açıp giriş yapabilir. Çalışanlar yalnızca kendi raporlarını görür.'),
+      h('div', { class: 'table-wrap' }, h('table', { class: 'table' },
+        h('thead', null, h('tr', null, h('th', null, 'Kişi'), h('th', null, 'Yetki'), h('th', null, 'Durum'), h('th', null, h('span', { class: 'sr' }, 'İşlemler')))),
+        h('tbody', null, active.map(row), passive.map(row)))),
+      U.btn('Kişi ekle', { variant: 'primary', onclick: () => memberDialog(null) })));
+
+    // ---- yapay zekâ ----
+    const g = S.gemini || {};
+    const key = h('input', { class: 'input', type: 'password', id: 'g-key', value: g.apiKey || '', placeholder: 'AIza…', autocomplete: 'off' });
+    const model = h('input', { class: 'input', id: 'g-model', value: g.model || AI.DEFAULT_MODEL, autocomplete: 'off' });
+    const gmsg = h('div', { class: 'form-msg' });
+    const saveG = async () => { const v = { apiKey: key.value.trim(), model: model.value.trim() || AI.DEFAULT_MODEL }; await API.setSetting('gemini', v); S.gemini = v; };
+    main.append(section('Yapay zekâ',
+      h('p', { class: 'muted' }, 'Değerlendirme, analiz ve asistan Google Gemini ile çalışır. Anahtar ücretsizdir: aistudio.google.com/apikey adresinde Google hesabınla giriş yapıp "Create API key" de. Anahtarı yalnızca yöneticiler görebilir.'),
+      h('div', { class: 'form two' },
+        h('div', { class: 'field' }, h('label', { for: 'g-key' }, 'Gemini API anahtarı'), key),
+        h('div', { class: 'field' }, h('label', { for: 'g-model' }, 'Model'), model, h('small', null, 'Çoğu zaman değiştirmen gerekmez. "' + AI.DEFAULT_MODEL + '" her zaman güncel modeli kullanır.'))),
+      gmsg,
+      h('div', { class: 'row' },
+        U.btn('Kaydet', { variant: 'primary', onclick: async (e) => { await U.busy(e.currentTarget, async () => { try { await saveG(); gmsg.textContent = 'Kaydedildi.'; gmsg.className = 'form-msg ok'; } catch (err) { gmsg.textContent = err.message; gmsg.className = 'form-msg err'; } }); } }),
+        U.btn('Bağlantıyı dene', { variant: 'ghost', onclick: async (e) => { await U.busy(e.currentTarget, async () => { try { await saveG(); const t = await geminiCall({ system: 'Kısa cevap ver.', text: 'Sadece "Bağlantı çalışıyor" yaz.', maxTokens: 2000 }); gmsg.textContent = 'Gemini yanıt verdi: ' + t.slice(0, 80); gmsg.className = 'form-msg ok'; } catch (err) { gmsg.textContent = err.message; gmsg.className = 'form-msg err'; } }, 'Deneniyor…'); } }))));
+
+    // ---- yedek ----
+    const bmsg = h('div', { class: 'form-msg' });
+    const mark = async () => { const v = { last: new Date().toISOString() }; try { await API.setSetting('backup', v); S.backup = v; } catch { /* */ } };
+    const xl = (range) => async (e) => {
+      const b = e.currentTarget;
+      await U.busy(b, async () => {
+        try {
+          const w = U.weekRange(0);
+          const opt = range === 'week'
+            ? { from: w.from, to: w.sun, title: 'Rapor yedeği: ' + U.shortDate(w.from) + ' – ' + U.shortDate(w.sun), fileName: 'rapor-yedegi-' + w.from + '_' + w.sun }
+            : { from: '', to: '', title: 'Rapor Defteri: tüm raporlar (' + U.shortDate(U.today()) + ')', fileName: 'rapor-defteri-tum-' + U.today() };
+          const r = await Export.excel(S, { ...opt, onProgress: (i, n) => { b.textContent = 'Hazırlanıyor ' + i + '/' + n + '…'; } });
+          if (range !== 'week') await mark();
+          bmsg.textContent = r.count ? r.count + ' rapor Excel\'e yazıldı' + (r.imgCount ? ', ' + r.imgCount + ' görsel dosyaya gömüldü.' : '.') : 'Bu aralıkta rapor yok; boş bir dosya indirildi.';
+          bmsg.className = 'form-msg ok';
+        } catch (err) { bmsg.textContent = err.message; bmsg.className = 'form-msg err'; }
+      }, 'Hazırlanıyor…');
+    };
+    main.append(section('Yedekleme',
+      h('p', { class: 'muted' }, (S.backup && S.backup.last ? 'Son tam yedek: ' + new Date(S.backup.last).toLocaleString('tr-TR') + '. ' : 'Henüz tam yedek alınmadı. ') + 'Veriler Supabase\'de duruyor ama ücretsiz planda otomatik yedek yok. Ayda bir tüm raporları Excel\'e aktarman yeterli.'),
+      h('div', { class: 'row' },
+        U.btn('Bu haftayı Excel\'e aktar', { variant: 'ghost', onclick: xl('week') }),
+        U.btn('Tüm raporları Excel\'e aktar', { variant: 'primary', onclick: xl('all') }),
+        U.btn('JSON yedeği indir', { variant: 'ghost', onclick: () => { Export.json(S); mark(); U.toast('JSON yedeği indirildi.'); } })),
+      bmsg));
+  }
+
+  // ---- görünüm ----
+  const t = Theme.get();
+  const modeSeg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Tema' });
+  const renderMode = () => U.clear(modeSeg, [['light', 'Açık'], ['dark', 'Koyu'], ['system', 'Sisteme uy']].map(([k, l]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String((Theme.get().mode || 'light') === k), class: 'seg-item' + ((Theme.get().mode || 'light') === k ? ' on' : ''), onclick: () => { Theme.set({ mode: k }); renderMode(); } }, l)));
+  renderMode();
+  const accents = ['', '#2F8F5B', '#C2410C', '#7C3AED', '#0E7490', '#BE185D'];
+  const accSw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Vurgu rengi' });
+  const renderAcc = () => U.clear(accSw, accents.map((c) => h('button', { type: 'button', role: 'radio', 'aria-checked': String((Theme.get().accent || '') === c), 'aria-label': c || 'Varsayılan mavi', class: 'swatch' + ((Theme.get().accent || '') === c ? ' on' : ''), style: { background: c || '#2B4ACB' }, onclick: () => { Theme.set({ accent: c }); renderAcc(); } })));
+  renderAcc();
+  main.append(section('Görünüm',
+    h('div', { class: 'form two' },
+      h('div', { class: 'field' }, h('span', { class: 'label' }, 'Tema'), modeSeg),
+      h('div', { class: 'field' }, h('span', { class: 'label' }, 'Vurgu rengi'), accSw)),
+    h('p', { class: 'muted small' }, 'Bu tercih yalnızca bu cihazda geçerli.')));
+
+  // ---- hesap ----
+  main.append(section('Hesabım',
+    h('div', { class: 'who big' }, avatar(S.me, 44), h('div', null, h('strong', null, S.me.name), h('small', null, S.me.email + ' (' + (isAdmin() ? 'yönetici' : 'çalışan') + ')'))),
+    h('div', { class: 'row' }, U.btn('Şifremi değiştir', { variant: 'ghost', onclick: () => passwordDialog() }), U.btn('Çıkış yap', { variant: 'ghost', onclick: () => API.signOut() }))));
+});
+
+</script>
+<script>
+// js/assistant.js
+// Sesli / yazılı asistan (yalnızca yönetici). Kısayol: Alt+J
+const Assistant = (() => {
+  const { h } = U;
+  let panel = null, log = null, input = null, micBtn = null, recognition = null, greeted = false;
+  let voice = (() => { try { return localStorage.getItem('rd-voice') !== '0'; } catch { return true; } })();
+
+  function add(role, text) {
+    log.appendChild(h('div', { class: 'msg ' + role }, text));
+    log.scrollTop = log.scrollHeight;
+  }
+  function speak(text) {
+    if (!voice || !('speechSynthesis' in window) || !text) return;
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'tr-TR'; speechSynthesis.speak(u); } catch { /* */ }
+  }
+  const say = (t) => { add('bot', t); speak(t); };
+
+  function greeting() {
+    if (!S.employees.length) return 'Merhaba! Ekipte henüz çalışan yok, Ayarlar sayfasından ekleyebilirsin.';
+    const came = S.employees.filter((e) => reportedToday(e.id)).map((e) => e.name.split(' ')[0]);
+    const miss = S.employees.filter((e) => !reportedToday(e.id)).map((e) => e.name.split(' ')[0]);
+    let m = 'Merhaba!';
+    if (came.length) m += ' Bugün ' + came.join(', ') + ' rapor gönderdi.';
+    if (miss.length) m += ' Henüz göndermeyenler: ' + miss.join(', ') + '.';
+    return m;
+  }
+  function match(name) {
+    const n = U.norm(name);
+    if (!n) return null;
+    return S.employees.find((e) => U.norm(e.name) === n) || S.employees.find((e) => U.norm(e.name).startsWith(n) || n.startsWith(U.norm(e.name).split(' ')[0]));
+  }
+
+  async function run(text) {
+    if (!text.trim()) return;
+    add('user', text);
+    if (!(S.gemini && S.gemini.apiKey)) { say('Önce Ayarlar sayfasından Gemini API anahtarını eklemen gerekiyor.'); return; }
+    const wait = h('div', { class: 'msg bot wait' }, 'Düşünüyor…'); log.appendChild(wait); log.scrollTop = log.scrollHeight;
+    try {
+      const resp = await geminiCall({ system: AI.assistantSystem(S.employees.map((e) => e.name)), text, maxTokens: 4000, json: true });
+      wait.remove();
+      await act(AI.extractJson(resp) || { action: 'speak', text: resp });
+    } catch (e) { wait.remove(); add('bot', e.message); speak('Bir hata oluştu.'); }
+  }
+
+  async function act(a) {
+    const emp = a.employee ? match(a.employee) : null;
+    switch (a.action) {
+      case 'add_record': {
+        if (!emp) return say('Hangi çalışan olduğunu anlayamadım.');
+        const link = a.link ? U.safeUrl(U.normalizeUrl(a.link)) : null;
+        const r = await API.addReport({ member_id: emp.id, date: U.today(), type: TYPES[a.type] ? a.type : 'gunluk', raw_text: a.text || '', links: link ? [link] : [], images: [], important: !!a.important });
+        S.reports.unshift(r); Router.refresh();
+        return say(emp.name.split(' ')[0] + ' için rapor eklendi.');
+      }
+      case 'mark_important_latest': {
+        if (!emp) return say('Hangi çalışan olduğunu anlayamadım.');
+        const last = reportsOf(emp.id).sort((x, y) => y.date.localeCompare(x.date) || y.created_at.localeCompare(x.created_at))[0];
+        if (!last) return say(emp.name.split(' ')[0] + ' için kayıt bulunamadı.');
+        const s = await API.updateReport(last.id, { important: true });
+        S.reports = S.reports.map((x) => (x.id === s.id ? s : x)); Router.refresh();
+        return say(emp.name.split(' ')[0] + ' adlı çalışanın son raporu önemli olarak işaretlendi.');
+      }
+      case 'open_employee':
+      case 'switch_tab':
+        if (!emp) return say('Böyle bir çalışan bulamadım.');
+        Router.go('#/calisan/' + emp.id);
+        return say(emp.name.split(' ')[0] + ' sayfası açıldı.');
+      case 'search_summary': {
+        const { allData } = await AI.promptData(S, '', '', { withImages: false });
+        const out = await geminiCall({ system: AI.ASK_SYSTEM, text: 'KAYITLAR:\n' + JSON.stringify(allData) + '\n\nSORU: ' + (a.query || ''), maxTokens: 8000 });
+        return say(out.replace(/^\[\[IMG:[^\]]+\]\]$/gm, '').trim());
+      }
+      default:
+        return say(a.text || 'Anlayamadım, tekrar söyler misin?');
+    }
+  }
+
+  function listen() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { add('bot', 'Bu tarayıcı sesli komutu desteklemiyor. Chrome ya da Edge kullanabilirsin.'); return; }
+    if (!recognition) {
+      recognition = new SR(); recognition.lang = 'tr-TR'; recognition.interimResults = false; recognition.maxAlternatives = 1;
+      recognition.onstart = () => micBtn.classList.add('on');
+      recognition.onend = () => micBtn.classList.remove('on');
+      recognition.onresult = (e) => run(e.results[0][0].transcript);
+      recognition.onerror = (e) => {
+        micBtn.classList.remove('on');
+        add('bot', e.error === 'not-allowed' ? 'Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden mikrofona izin ver.' : e.error === 'no-speech' ? 'Ses algılanamadı, tekrar dener misin?' : 'Mikrofon hatası: ' + e.error);
+      };
+    }
+    try { recognition.start(); } catch { /* zaten dinliyor */ }
+  }
+
+  function toggle(open) {
+    const want = open ?? !panel.classList.contains('open');
+    panel.classList.toggle('open', want);
+    if (want) {
+      if (!greeted) { greeted = true; add('bot', greeting()); }
+      setTimeout(() => input.focus(), 50);
+    }
+  }
+
+  function mount() {
+    unmount();
+    if (!isAdmin()) return;
+    log = h('div', { class: 'as-log', 'aria-live': 'polite' });
+    input = h('input', { class: 'input', placeholder: 'Örn: Zeynep için not ekle: sunum bitti', 'aria-label': 'Asistana yaz', onkeydown: (e) => { if (e.key === 'Enter') { const t = input.value; input.value = ''; run(t); } } });
+    micBtn = h('button', { class: 'icon-btn mic', 'aria-label': 'Sesle konuş', title: 'Sesle konuş', onclick: listen }, '🎤');
+    const voiceBtn = h('button', { class: 'link-btn', onclick: () => { voice = !voice; try { localStorage.setItem('rd-voice', voice ? '1' : '0'); } catch { /* */ } voiceBtn.textContent = voice ? 'Sesli yanıt açık' : 'Sesli yanıt kapalı'; if (!voice) speechSynthesis.cancel(); } }, voice ? 'Sesli yanıt açık' : 'Sesli yanıt kapalı');
+    panel = h('div', { class: 'as-panel', role: 'dialog', 'aria-label': 'Asistan' },
+      h('div', { class: 'as-head' }, h('strong', null, 'Asistan'), voiceBtn, h('button', { class: 'icon-btn', 'aria-label': 'Asistanı kapat', onclick: () => toggle(false) }, '✕')),
+      log,
+      h('div', { class: 'as-input' }, micBtn, input, U.btn('Gönder', { variant: 'primary', small: true, onclick: () => { const t = input.value; input.value = ''; run(t); } })),
+      h('div', { class: 'as-hint' }, 'Kısayol: Alt+J'));
+    const fab = h('button', { class: 'fab', 'aria-label': 'Asistanı aç', title: 'Asistan (Alt+J)', onclick: () => toggle() }, h('span', { 'aria-hidden': 'true' }, '🎙️'));
+    document.body.append(panel, fab);
+  }
+  function unmount() { document.querySelectorAll('.as-panel, .fab').forEach((e) => e.remove()); panel = null; greeted = false; }
+  document.addEventListener('keydown', (e) => {
+    if (panel && e.altKey && !e.ctrlKey && (e.key === 'j' || e.key === 'J')) { e.preventDefault(); toggle(true); listen(); }
+    if (panel && e.key === 'Escape' && panel.classList.contains('open') && !document.querySelector('dialog[open]')) toggle(false);
+  });
+  return { mount, unmount };
+})();
+
+</script>
+<script>
+// js/main.js
+// Başlangıç, giriş ekranı ve oturum yönetimi
+(() => {
+  const { h } = U;
+  const root = document.getElementById('app');
+  const SUPABASE_JS = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+  let starting = false, recovery = false;
+
+  function loading(text = 'Yükleniyor…') { U.clear(root, h('div', { class: 'splash' }, h('span', { class: 'brand-mark big', 'aria-hidden': 'true' }), h('p', null, text))); }
+  function fatal(text) { U.clear(root, h('div', { class: 'splash' }, h('span', { class: 'brand-mark big', 'aria-hidden': 'true' }), h('p', null, text), U.btn('Tekrar dene', { variant: 'primary', onclick: () => location.reload() }))); }
+
+  async function boot() {
+    Theme.apply();
+    loading();
+    const cfg = window.RD_CONFIG || {};
+    const remote = cfg.supabaseUrl && cfg.supabaseAnonKey && !/BURAYA/.test(cfg.supabaseUrl + cfg.supabaseAnonKey);
+    try {
+      if (remote) { await U.loadScript(SUPABASE_JS); API = RemoteAPI(cfg); } else API = DemoAPI();
+      await API.init();
+    } catch (e) { fatal(e.message); return; }
+    API.onAuth((ev) => {
+      if (ev === 'PASSWORD_RECOVERY') { recovery = true; return; }
+      if (ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') { if (ev === 'SIGNED_IN' && S.me && S.me.email === (API.session() || {}).email) return; start(); }
+    });
+    start();
+  }
+
+  async function start() {
+    if (starting) return; starting = true;
+    try {
+      Assistant.unmount(); Router.unmount();
+      if (!API.session()) { S.me = null; login(); return; }
+      loading();
+      const me = await API.me();
+      if (!me) { noAccess(); return; }
+      S.me = me;
+      await loadData();
+      const main = Shell.build(root);
+      Router.mount(main);
+      Assistant.mount();
+      if (recovery) { recovery = false; passwordDialog('Yeni şifreni belirle'); }
+    } catch (e) { console.error(e); fatal('Veriler yüklenemedi: ' + e.message); }
+    finally { starting = false; }
+  }
+
+  function noAccess() {
+    U.clear(root, h('div', { class: 'auth' }, h('div', { class: 'auth-card' },
+      h('h1', { class: 'auth-title' }, 'Erişimin yok'),
+      h('p', null, (API.session() || {}).email + ' hesabı ekip listesinde değil ya da listeden çıkarılmış. Yöneticinden seni tekrar eklemesini iste.'),
+      U.btn('Çıkış yap', { variant: 'primary', onclick: () => API.signOut() }))));
+  }
+
+  function login() {
+    let mode = 'in';
+    const email = h('input', { class: 'input', type: 'email', id: 'l-email', autocomplete: 'email', required: true });
+    const pw = h('input', { class: 'input', type: 'password', id: 'l-pw', autocomplete: 'current-password', required: true });
+    const pw2 = h('input', { class: 'input', type: 'password', id: 'l-pw2', autocomplete: 'new-password' });
+    const pw2Field = h('div', { class: 'field' }, h('label', { for: 'l-pw2' }, 'Şifre (tekrar)'), pw2);
+    const msg = h('div', { class: 'form-msg', role: 'alert' });
+    const submit = U.btn('Giriş yap', { variant: 'primary', type: 'submit' });
+    const tabs = h('div', { class: 'seg wide', role: 'tablist' });
+    const forgot = h('button', { type: 'button', class: 'link-btn', onclick: async () => {
+      if (!email.value.trim()) { msg.textContent = 'Önce e-posta adresini yaz.'; msg.className = 'form-msg err'; email.focus(); return; }
+      try { await API.resetPassword(email.value); msg.textContent = 'Şifre sıfırlama bağlantısı e-postana gönderildi. Gelen kutunu (ve gereksiz klasörünü) kontrol et.'; msg.className = 'form-msg ok'; }
+      catch (e) { msg.textContent = e.message; msg.className = 'form-msg err'; }
+    } }, 'Şifremi unuttum');
+    const help = h('p', { class: 'auth-help' });
+    const render = () => {
+      U.clear(tabs, [['in', 'Giriş yap'], ['up', 'Hesap oluştur']].map(([k, l]) => h('button', { type: 'button', role: 'tab', 'aria-selected': String(mode === k), class: 'seg-item' + (mode === k ? ' on' : ''), onclick: () => { mode = k; msg.textContent = ''; render(); } }, l)));
+      pw2Field.hidden = mode === 'in'; pw2.required = mode === 'up';
+      pw.autocomplete = mode === 'in' ? 'current-password' : 'new-password';
+      submit.textContent = mode === 'in' ? 'Giriş yap' : 'Hesabı oluştur';
+      forgot.hidden = mode !== 'in' || API.mode === 'demo';
+      help.textContent = mode === 'in' ? 'Hesabın yoksa "Hesap oluştur" sekmesinden, yöneticinin eklediği e-postayla kendi şifreni belirleyebilirsin.' : 'Yöneticinin seni ekip listesine eklediği e-postayı yaz ve kendine bir şifre belirle (en az 6 karakter).';
+    };
+    render();
+    const form = h('form', { class: 'form', onsubmit: async (e) => {
+      e.preventDefault(); msg.textContent = ''; msg.className = 'form-msg';
+      await U.busy(submit, async () => {
+        try {
+          if (mode === 'in') { await API.signIn(email.value, pw.value); return; }
+          if (pw.value.length < 6) throw new Error('Şifre en az 6 karakter olmalı.');
+          if (pw.value !== pw2.value) throw new Error('Şifreler aynı değil.');
+          const st = await API.canSignUp(email.value);
+          if (st === 'YOK') throw new Error('Bu e-posta ekip listesinde yok. Yöneticinden seni eklemesini iste.');
+          if (st === 'PASIF') throw new Error('Bu e-postanın erişimi kapatılmış. Yöneticinle görüş.');
+          if (st === 'VAR') throw new Error('Bu e-postayla zaten hesap açılmış. "Giriş yap" sekmesini kullan.');
+          const r = await API.signUp(email.value, pw.value);
+          if (r.needsConfirm) { msg.textContent = 'Hesabın oluşturuldu. E-postana gelen onay bağlantısına tıkla, sonra buradan giriş yap.'; msg.className = 'form-msg ok'; mode = 'in'; render(); }
+        } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+      }, mode === 'in' ? 'Giriş yapılıyor…' : 'Oluşturuluyor…');
+    } },
+      tabs,
+      h('div', { class: 'field' }, h('label', { for: 'l-email' }, 'E-posta'), email),
+      h('div', { class: 'field' }, h('label', { for: 'l-pw' }, 'Şifre'), pw),
+      pw2Field, msg, submit, forgot);
+    U.clear(root, h('div', { class: 'auth' },
+      h('div', { class: 'auth-side', 'aria-hidden': 'true' },
+        h('div', { class: 'auth-lines' }),
+        h('div', { class: 'auth-brand' }, h('span', { class: 'brand-mark big' }), h('span', null, 'Rapor Defteri')),
+        h('p', { class: 'auth-quote' }, 'Ekibin günlük raporları, tek defterde.')),
+      h('div', { class: 'auth-card' },
+        h('h1', { class: 'auth-title' }, mode === 'in' ? 'Hoş geldin' : 'Hoş geldin'),
+        form, help,
+        API.mode === 'demo' ? h('div', { class: 'demo-box' },
+          h('strong', null, 'Deneme modu'),
+          h('p', null, 'Supabase bağlantısı henüz ayarlanmadı. Örnek verilerle iki rolü de deneyebilirsin.'),
+          h('div', { class: 'row' },
+            U.btn('Yönetici olarak dene', { variant: 'ghost', onclick: () => API.loginAs('admin') }),
+            U.btn('Çalışan olarak dene', { variant: 'ghost', onclick: () => API.loginAs('employee') }))) : null)));
+    setTimeout(() => email.focus(), 30);
+  }
+
+  // Sekmeye dönünce verileri tazele (başkalarının eklediği raporlar görünsün)
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !S.me || Date.now() - S.loadedAt < 45000) return;
+    try {
+      await loadData();
+      const busyNow = document.querySelector('dialog[open]') || [...document.querySelectorAll('.main textarea')].some((t) => t.value.trim());
+      if (!busyNow) Router.refresh(); else Shell.update();
+    } catch { /* bağlantı yoksa sessizce geç */ }
+  });
+
+  boot();
+})();
+
+</script>
+</body>
+</html>
