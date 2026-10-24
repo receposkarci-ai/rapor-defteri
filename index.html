@@ -392,6 +392,80 @@ a.who:hover { color: var(--accent); }
   .fab { right: 16px; bottom: 16px; }
   .as-panel { right: 16px; bottom: 80px; }
 }
+
+/* ---------- görevler ---------- */
+.task-board { display: grid; gap: 22px; }
+.task-group > header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.task-group h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.task-group.overdue h3 { color: var(--danger); }
+.task-group.overdue .tasks { border-color: color-mix(in srgb, var(--danger) 35%, var(--line)); }
+.task-empty { margin: 0; padding: 10px 14px; border: 1px dashed var(--line); border-radius: var(--r); }
+.tasks { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+.task { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line-2); position: relative; }
+.task:last-child { border-bottom: 0; }
+.task::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--who); opacity: .8; }
+.task.important { background: color-mix(in srgb, var(--star) 5%, var(--surface)); }
+.tick { flex: 0 0 auto; width: 24px; height: 24px; margin-top: 1px; border-radius: 7px; border: 2px solid color-mix(in srgb, var(--muted) 60%, var(--line)); background: var(--surface); color: transparent; display: grid; place-items: center; cursor: pointer; font-size: 14px; font-weight: 800; padding: 0; }
+.tick:hover:not(:disabled) { border-color: var(--ok); }
+.tick.on { background: var(--ok); border-color: var(--ok); color: #fff; }
+.tick:disabled { cursor: default; opacity: .7; }
+.task-body { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.task-title { font-weight: 600; font-size: 15px; overflow-wrap: anywhere; }
+.task.done .task-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.task-desc { font-size: 14px; color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
+.task-note { font-size: 13.5px; background: var(--ok-soft); color: var(--ink); padding: 6px 10px; border-radius: 6px; margin-top: 4px; white-space: pre-wrap; }
+.task-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; font-size: 12.5px; }
+.task-meta .who { font-size: 13px; }
+.done-at { color: var(--ok); font-weight: 600; }
+.task-actions { display: flex; gap: 2px; flex-wrap: wrap; justify-content: flex-end; }
+.badge.p-gunluk { background: var(--accent-soft); color: var(--accent); }
+.badge.p-haftalik { background: var(--plan-soft); color: var(--plan); }
+.badge.p-aylik { background: var(--warn-soft); color: color-mix(in srgb, var(--star) 75%, var(--ink)); }
+.prog { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.prog-bar { width: 64px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.prog-bar span { display: block; height: 100%; background: var(--ok); border-radius: 3px; }
+.tgrid td { text-align: left; }
+.tgrid thead th { text-align: left; font-size: 13px; }
+.late { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 12px; background: var(--danger-soft); color: var(--danger); font-weight: 700; font-size: 13px; text-decoration: none; }
+.date-nav { display: inline-flex; align-items: center; gap: 4px; }
+.date-nav .icon-btn { font-size: 20px; }
+.pick { display: flex; flex-wrap: wrap; gap: 6px; }
+.pick-item { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; font-size: 14px; }
+.pick-item:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.pick-item input { accent-color: var(--accent); }
+.pick-item.all { border-style: dashed; }
+
+/* ---------- çalışanlar ---------- */
+.nav-group { display: flex; align-items: center; justify-content: space-between; }
+.nav-group-link { font-size: 12.5px; font-weight: 600; color: var(--accent); text-decoration: none; }
+.nav-group-link:hover { text-decoration: underline; }
+.mcards { display: grid; gap: 10px; }
+.mcard { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); position: relative; }
+.mcard::before { content: ""; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 4px; border-radius: var(--r) 0 0 var(--r); background: var(--who); }
+.mcard.passive { opacity: .65; }
+.mcard .order { display: grid; gap: 0; }
+.mcard .order .icon-btn { width: 28px; height: 24px; }
+.mcard .order .icon-btn:disabled { opacity: .25; cursor: default; }
+.mcard-main { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.mcard-name { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 16px; font-weight: 700; }
+.mcard-name a { color: var(--ink); text-decoration: none; }
+.mcard-name a:hover { color: var(--accent); }
+.mcard-sub { font-size: 14px; color: var(--ink-2); }
+.mcard-contact { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.mcard-note { font-size: 13px; margin-top: 4px; padding: 6px 10px; border-radius: 6px; background: var(--warn-soft); white-space: pre-wrap; }
+.mcard-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.private-note { margin: -12px 0 24px; padding: 10px 14px; border-radius: var(--r); background: var(--warn-soft); font-size: 14px; white-space: pre-wrap; }
+.danger-zone { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 6px; }
+.danger-zone h3 { margin: 0 0 8px; font-size: 14px; }
+.person-head .page-actions { margin-left: auto; }
+@media (max-width: 900px) {
+  .task { flex-wrap: wrap; }
+  .task-actions { width: 100%; justify-content: flex-start; padding-left: 36px; }
+  .mcard { flex-wrap: wrap; }
+  .mcard-actions { width: 100%; justify-content: flex-start; }
+  .person-head .page-actions { margin-left: 0; width: 100%; }
+}
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 @media print { .side, .topbar, .fab, .as-panel, .demo-bar { display: none !important; } }
 
@@ -589,12 +663,12 @@ const DemoAPI = () => {
     const day = (i) => { const d = U.parse(w.from); d.setDate(d.getDate() + i); return U.iso(d); };
     const t = U.today();
     const cap = (s) => (s > t ? t : s);
-    const m = (name, email, role, color) => ({ id: U.uid(), name, email, role, color, avatar: null, active: true, user_id: null, created_at: now() });
+    const m = (name, email, role, color, title, department) => ({ id: U.uid(), name, email, role, color, avatar: null, active: true, user_id: null, created_at: now(), title: title || null, department: department || null, phone: null, sort_order: 0 });
     const admin = m('Yönetici', 'yonetici@ornek.com', 'admin', '#3B6CF6');
-    const zey = m('Zeynep Kaya', 'zeynep@ornek.com', 'employee', '#D9822B');
-    const yav = m('Yavuz Demir', 'yavuz@ornek.com', 'employee', '#2F8F5B');
-    const elis = m('Elis Arslan', 'elis@ornek.com', 'employee', '#9B51E0');
-    const ela = m('Ela Şahin', 'ela@ornek.com', 'employee', '#D1435B');
+    const zey = m('Zeynep Kaya', 'zeynep@ornek.com', 'employee', '#D9822B', 'Grafik tasarımcı', 'Tasarım');
+    const yav = m('Yavuz Demir', 'yavuz@ornek.com', 'employee', '#2F8F5B', 'Proje yöneticisi', 'Operasyon');
+    const elis = m('Elis Arslan', 'elis@ornek.com', 'employee', '#9B51E0', 'Web geliştirici', 'Yazılım');
+    const ela = m('Ela Şahin', 'ela@ornek.com', 'employee', '#D1435B', 'Satın alma uzmanı', 'Operasyon');
     const r = (mem, date, raw_text, type = 'gunluk', extra = {}) => ({ id: U.uid(), member_id: mem.id, date: cap(date), type, raw_text, links: [], images: [], important: false, created_by: null, created_at: now(), updated_at: now(), ...extra });
     return {
       users: { 'yonetici@ornek.com': 'deneme', 'zeynep@ornek.com': 'deneme' },
@@ -615,11 +689,25 @@ const DemoAPI = () => {
         { id: U.uid(), date: cap(day(3)), type: 'etkinlik', text: 'Gelecek hafta salı 14.00\'te müşteri ziyareti var.', created_by: null, created_at: now() },
       ],
       settings: {},
+      memberNotes: {},
+      tasks: [
+        task(zey, 'Sosyal medya hesaplarını kontrol et', 'gunluk', true, w.from, 'Yorumları yanıtla, mesajları cevapla.'),
+        task(zey, 'Kampanya afişini bitir', 'haftalik', false, w.from, ''),
+        task(yav, 'Müşteri sunumunu güncelle', 'haftalik', false, w.from, 'Geri bildirimleri işle.'),
+        task(yav, 'Aylık proje raporu', 'aylik', true, U.today().slice(0, 8) + '01', ''),
+        task(elis, 'Site yedeğini al', 'haftalik', true, w.from, ''),
+        task(ela, 'Tedarikçi faturalarını dosyala', 'aylik', false, U.today().slice(0, 8) + '01', ''),
+      ],
+      checks: [],
     };
+    function task(mem, title, period, recurring, start_date, description) {
+      return { id: U.uid(), member_id: mem.id, title, description, period, recurring, start_date, end_date: null, important: false, created_by: null, created_at: now(), updated_at: now() };
+    }
   }
   function load() {
     try { db = JSON.parse(localStorage.getItem(KEY)); } catch { db = null; }
     if (!db || !db.members) { db = seed(); save(); }
+    db.tasks = db.tasks || []; db.checks = db.checks || []; db.memberNotes = db.memberNotes || {};
     try { images = JSON.parse(localStorage.getItem(IKEY)) || {}; } catch { images = {}; }
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch { /* depolama kapalı olabilir */ } }
@@ -672,7 +760,7 @@ const DemoAPI = () => {
       if (!m.name || !m.name.trim()) throw new Error('İsim boş olamaz.');
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('Geçerli bir e-posta yaz.');
       if (db.members.some((x) => x.email === email && x.id !== m.id)) throw new Error('Bu e-posta zaten ekip listesinde.');
-      const row = { name: m.name.trim(), email, role: m.role || 'employee', color: m.color || '#3B6CF6', avatar: m.avatar || null, active: m.active !== false };
+      const row = { name: m.name.trim(), email, role: m.role || 'employee', color: m.color || '#3B6CF6', avatar: m.avatar || null, active: m.active !== false, title: m.title || null, department: m.department || null, phone: m.phone || null, sort_order: m.sort_order || 0 };
       if (m.id) {
         const cur = db.members.find((x) => x.id === m.id);
         if (cur.role === 'admin' && cur.active && (row.role !== 'admin' || !row.active) && !db.members.some((x) => x.role === 'admin' && x.active && x.id !== cur.id)) throw new Error('En az bir aktif yönetici kalmalı.');
@@ -681,6 +769,57 @@ const DemoAPI = () => {
       }
       const n = { id: U.uid(), ...row, user_id: null, created_at: now() };
       db.members.push(n); save(); return clone(n);
+    },
+
+    async setOrder(list) { need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.'); list.forEach(({ id, sort_order }) => { const m = db.members.find((x) => x.id === id); if (m) m.sort_order = sort_order; }); save(); },
+    async setPassword(memberId, pw) {
+      need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      if (String(pw || '').length < 6) throw new Error('Şifre en az 6 karakter olmalı.');
+      const m = db.members.find((x) => x.id === memberId);
+      if (!m || !db.users[m.email]) throw new Error('Bu kişi henüz hesap açmamış; şifresini kendisi belirleyecek.');
+      db.users[m.email] = pw; save();
+    },
+    async deleteMember(m) {
+      need(); await delay(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      if (m.id === user().id) throw new Error('Kendi kaydını silemezsin.');
+      const cur = db.members.find((x) => x.id === m.id);
+      if (cur && cur.role === 'admin' && cur.active && !db.members.some((x) => x.role === 'admin' && x.active && x.id !== cur.id)) throw new Error('En az bir aktif yönetici kalmalı.');
+      db.reports.filter((r) => r.member_id === m.id).forEach((r) => (r.images || []).forEach((p) => delete images[p]));
+      const taskIds = new Set(db.tasks.filter((t) => t.member_id === m.id).map((t) => t.id));
+      db.reports = db.reports.filter((r) => r.member_id !== m.id);
+      db.tasks = db.tasks.filter((t) => !taskIds.has(t.id));
+      db.checks = db.checks.filter((c) => !taskIds.has(c.task_id));
+      delete db.memberNotes[m.id];
+      if (cur) delete db.users[cur.email];
+      db.members = db.members.filter((x) => x.id !== m.id); save(); saveImages();
+    },
+    async memberNotes() { need(); return isAdmin() ? clone(db.memberNotes) : {}; },
+    async saveMemberNote(memberId, note) { need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.'); db.memberNotes[memberId] = note; save(); },
+
+    async tasks() { need(); return clone(db.tasks.filter((t) => isAdmin() || t.member_id === user().id)); },
+    async addTasks(rows) {
+      need(); await delay(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      const out = rows.map((r) => ({ id: U.uid(), description: '', recurring: false, end_date: null, important: false, ...r, created_by: user().id, created_at: now(), updated_at: now() }));
+      if (out.some((t) => !String(t.title || '').trim())) throw new Error('Görev başlığı boş olamaz.');
+      db.tasks.push(...out); save(); return clone(out);
+    },
+    async updateTask(id, patch) {
+      need(); await delay(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
+      const t = db.tasks.find((x) => x.id === id); Object.assign(t, patch, { updated_at: now() }); save(); return clone(t);
+    },
+    async deleteTask(id) { need(); if (!isAdmin()) throw new Error('Bu işlem için yönetici yetkisi gerekir.'); db.tasks = db.tasks.filter((t) => t.id !== id); db.checks = db.checks.filter((c) => c.task_id !== id); save(); },
+    async checks(since) {
+      need(); const mine = new Set(db.tasks.filter((t) => isAdmin() || t.member_id === user().id).map((t) => t.id));
+      return clone(db.checks.filter((c) => mine.has(c.task_id) && c.period_key >= since));
+    },
+    async setCheck(taskId, key, done, note = '') {
+      need(); await delay();
+      const t = db.tasks.find((x) => x.id === taskId);
+      if (!t || !(isAdmin() || t.member_id === user().id)) throw new Error('Kaydedilemedi: yetki yok.');
+      db.checks = db.checks.filter((c) => !(c.task_id === taskId && c.period_key === key));
+      let c = null;
+      if (done) { c = { task_id: taskId, period_key: key, note, done_by: user().id, done_at: now() }; db.checks.push(c); }
+      save(); return c && clone(c);
     },
 
     async reports() { need(); return clone(db.reports.filter(visibleReport).sort((a, b) => b.date.localeCompare(a.date) || b.created_at.localeCompare(a.created_at))); },
@@ -752,6 +891,12 @@ const RemoteAPI = (cfg) => {
     if (/Password should be at least/i.test(m)) throw new Error('Şifre en az 6 karakter olmalı.');
     if (/rate limit/i.test(m)) throw new Error('Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar dene.');
     if (/duplicate key.*members_email/i.test(m)) throw new Error('Bu e-posta zaten ekip listesinde.');
+    if (/EPOSTA_KULLANIMDA/.test(m)) throw new Error('Bu e-posta başka bir kişide kullanılıyor.');
+    if (/GECERSIZ_EPOSTA/.test(m)) throw new Error('Geçerli bir e-posta yaz.');
+    if (/KISA_SIFRE/.test(m)) throw new Error('Şifre en az 6 karakter olmalı.');
+    if (/HESAP_YOK/.test(m)) throw new Error('Bu kişi henüz hesap açmamış; şifresini kendisi belirleyecek.');
+    if (/KENDINI_SILEMEZ/.test(m)) throw new Error('Kendi kaydını silemezsin.');
+    if (/YETKI_YOK/.test(m)) throw new Error('Bu işlem için yönetici yetkisi gerekir.');
     if (/Failed to fetch|NetworkError/i.test(m)) throw new Error('Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.');
     throw new Error(fallback ? fallback + ': ' + m : m);
   };
@@ -788,11 +933,42 @@ const RemoteAPI = (cfg) => {
     },
     async members() { const { data, error } = await sb.from('members').select('*').order('created_at'); fail(error); return data; },
     async saveMember(m) {
-      const row = { name: m.name, email: m.email, role: m.role, color: m.color, avatar: m.avatar || null, active: m.active !== false };
-      const q = m.id ? sb.from('members').update(row).eq('id', m.id) : sb.from('members').insert(row);
+      const email = String(m.email || '').trim().toLowerCase();
+      const row = { name: m.name, role: m.role, color: m.color, avatar: m.avatar || null, active: m.active !== false,
+        title: m.title || null, department: m.department || null, phone: m.phone || null, sort_order: m.sort_order || 0 };
+      let q;
+      if (m.id) {
+        const { data: cur, error: e1 } = await sb.from('members').select('email').eq('id', m.id).single();
+        fail(e1);
+        if (cur.email !== email) { const { error: e2 } = await sb.rpc('admin_change_email', { p_member: m.id, p_email: email }); fail(e2, 'E-posta değiştirilemedi'); }
+        q = sb.from('members').update(row).eq('id', m.id);
+      } else q = sb.from('members').insert({ ...row, email });
       const { data, error } = await q.select().single();
       fail(error, 'Kaydedilemedi');
       return data;
+    },
+    async setOrder(list) {
+      for (const { id, sort_order } of list) { const { error } = await sb.from('members').update({ sort_order }).eq('id', id); fail(error, 'Sıra kaydedilemedi'); }
+    },
+    async setPassword(memberId, pw) { const { error } = await sb.rpc('admin_set_password', { p_member: memberId, p_password: pw }); fail(error, 'Şifre değiştirilemedi'); },
+    async deleteMember(m) {
+      const { data: reps, error: e1 } = await sb.from('reports').select('images').eq('member_id', m.id);
+      fail(e1);
+      const paths = reps.flatMap((r) => r.images || []);
+      for (let i = 0; i < paths.length; i += 100) await sb.storage.from(BUCKET).remove(paths.slice(i, i + 100));
+      const { error } = await sb.rpc('admin_delete_member', { p_member: m.id }); fail(error, 'Silinemedi');
+    },
+    async memberNotes() { const { data, error } = await sb.from('member_notes').select('*'); fail(error); return Object.fromEntries(data.map((n) => [n.member_id, n.note])); },
+    async saveMemberNote(memberId, note) { const { error } = await sb.from('member_notes').upsert({ member_id: memberId, note, updated_at: new Date().toISOString() }); fail(error, 'Not kaydedilemedi'); },
+
+    async tasks() { const { data, error } = await sb.from('tasks').select('*').order('created_at'); fail(error); return data; },
+    async addTasks(rows) { const { data, error } = await sb.from('tasks').insert(rows).select(); fail(error, 'Görev kaydedilemedi'); return data; },
+    async updateTask(id, patch) { const { data, error } = await sb.from('tasks').update(patch).eq('id', id).select().single(); fail(error, 'Görev güncellenemedi'); return data; },
+    async deleteTask(id) { const { error } = await sb.from('tasks').delete().eq('id', id); fail(error, 'Görev silinemedi'); },
+    async checks(since) { const { data, error } = await sb.from('task_checks').select('*').gte('period_key', since); fail(error); return data; },
+    async setCheck(taskId, key, done, note = '') {
+      if (done) { const { data, error } = await sb.from('task_checks').upsert({ task_id: taskId, period_key: key, note, done_at: new Date().toISOString() }).select().single(); fail(error, 'Kaydedilemedi'); return data; }
+      const { error } = await sb.from('task_checks').delete().eq('task_id', taskId).eq('period_key', key); fail(error, 'Kaydedilemedi'); return null;
     },
 
     async reports() {
@@ -925,6 +1101,7 @@ SADECE verilen kayıtlara dayan, uydurma; bilgi yoksa "bu bilgi kayıtlarda yok"
   const WEEKLY_SYSTEM = `Sen bir ekip yöneticisi için haftalık değerlendirme raporu yazan bir asistansın. Sana JSON formatında iki şey verilecek:
 1) "calisanlar": çalışan isimlerine göre gruplanmış, her birinin o dönemdeki mesajları. Her mesajın "tarih", "gun", "mesaj" ve "tur" alanı var. "tur": "gunluk" (normal günlük çalışma notu), "hazir" (tamamlanmış/hazır iş; bunu "tamamladı", "hazırladı", "bitirdi" gibi ifadelerle vurgula), "gelecek_hafta" (çalışanın gelecek hafta yapacağı iş; bunu SADECE "GELECEK HAFTA EKİBİN ÇALIŞACAĞI ALANLAR" bölümünde kullan).
 2) "ekip": "toplantilar" (toplantı notları, tarih+gün+metin) ve "gelecek_hafta_etkinlikleri" (ekibin geneline ait gelecek hafta planları).
+3) "gorevler": çalışanlara verilen görevler ve durumları ("tamamlandı" / "tamamlanmadı", varsa çalışanın notu).
 
 GÖREV: Aşağıdaki şablona TAM uyan, DETAYLI ve AÇIKLAYICI bir "Haftalık Ekip Değerlendirmesi" yaz. Her madde tam bir cümle olsun; ne yapıldığını, hangi kararın alındığını, sonucun ne olduğunu açıkça anlat.
 
@@ -940,6 +1117,10 @@ HAFTALIK EKİP DEĞERLENDİRMESİ
 Günleri kronolojik sırayla yaz ve aralarına "---" koy. Kaydı olmayan günü hiç yazma.
 
 Rapor sonunda (SADECE ilgili veri varsa):
+
+📋 GÖREV DURUMU
+<Çalışan Adı>: <tamamlanan sayısı>/<toplam> görev tamamlandı.
+- Tamamlanmayanlar: <görev adları, varsa>
 
 📌 GELECEK HAFTA YAPILACAK ETKİNLİKLER
 - <madde>
@@ -968,8 +1149,24 @@ KURALLAR:
       toplantilar: notes.filter((n) => n.type === 'toplanti').map((n) => ({ tarih: n.date, gun: U.weekday(n.date), metin: n.text })),
       gelecek_hafta_etkinlikleri: notes.filter((n) => n.type === 'etkinlik').map((n) => ({ tarih: n.date, metin: n.text })),
     };
-    const empty = !Object.keys(calisanlar).length && !ekip.toplantilar.length && !ekip.gelecek_hafta_etkinlikleri.length;
-    return { calisanlar, ekip, empty };
+    // Görev durumu: dönemle kesişen her günlük/haftalık/aylık görev dönemi
+    const gorevler = {};
+    if (typeof Tasks !== 'undefined' && from && to) {
+      state.employees.forEach((emp) => {
+        const out = [];
+        for (const p of ['gunluk', 'haftalik', 'aylik']) {
+          for (let k = Tasks.keyOf(p, from); k <= to; k = Tasks.shift(p, k, 1)) {
+            Tasks.forMember(emp.id, p, k).forEach((t) => {
+              const c = Tasks.checkOf(t, k);
+              out.push({ gorev: t.title, donem: Tasks.PERIODS[p].label + ' (' + Tasks.label(p, k) + ')', durum: c ? 'tamamlandı' : 'tamamlanmadı', not: c && c.note ? c.note : undefined });
+            });
+          }
+        }
+        if (out.length) gorevler[emp.name] = out;
+      });
+    }
+    const empty = !Object.keys(calisanlar).length && !ekip.toplantilar.length && !ekip.gelecek_hafta_etkinlikleri.length && !Object.keys(gorevler).length;
+    return { calisanlar, ekip, gorevler, empty };
   }
 
   const assistantSystem = (names) => `Sen bir rapor defteri uygulamasının asistanısın (Türkçe konuşuyorsun). Kullanıcının sesli/yazılı komutunu al ve SADECE aşağıdaki JSON nesnelerinden birini döndür:
@@ -1094,7 +1291,7 @@ const Export = (() => {
 // Uygulama durumu, veri yükleme ve ortak bileşenler
 let API = null;
 const S = {
-  me: null, members: [], employees: [], reports: [], notes: [],
+  me: null, members: [], employees: [], reports: [], notes: [], tasks: [], checks: [], memberNotes: {},
   urls: {}, gemini: null, backup: null, loadedAt: 0,
 };
 const isAdmin = () => !!S.me && S.me.role === 'admin';
@@ -1106,17 +1303,17 @@ const TYPES = {
 };
 const NOTE_TYPES = { toplanti: 'Toplantı notu', etkinlik: 'Gelecek hafta etkinliği' };
 const PALETTE = ['#3B6CF6', '#D9822B', '#2F8F5B', '#9B51E0', '#D1435B', '#1A9AA0', '#B8860B', '#5B6B82'];
+const byOrder = (a, b) => (a.sort_order || 0) - (b.sort_order || 0) || a.name.localeCompare(b.name, 'tr');
 
 async function loadData() {
-  const [members, reports, notes] = await Promise.all([API.members(), API.reports(), API.notes()]);
-  S.members = members; S.reports = reports; S.notes = notes;
+  const since = (() => { const d = new Date(); d.setMonth(d.getMonth() - 14); return U.iso(d); })();
+  const [members, reports, notes, tasks, checks] = await Promise.all([API.members(), API.reports(), API.notes(), API.tasks(), API.checks(since)]);
+  S.members = members; S.reports = reports; S.notes = notes; S.tasks = tasks; S.checks = checks;
   const me = members.find((m) => m.id === S.me.id); if (me) S.me = me;
-  S.employees = isAdmin()
-    ? members.filter((m) => m.role === 'employee' && m.active).sort((a, b) => a.name.localeCompare(b.name, 'tr'))
-    : [S.me];
+  S.employees = isAdmin() ? members.filter((m) => m.role === 'employee' && m.active).sort(byOrder) : [S.me];
   if (isAdmin()) {
-    const [g, b] = await Promise.all([API.getSetting('gemini').catch(() => null), API.getSetting('backup').catch(() => null)]);
-    S.gemini = g; S.backup = b;
+    const [g, b, mn] = await Promise.all([API.getSetting('gemini').catch(() => null), API.getSetting('backup').catch(() => null), API.memberNotes().catch(() => ({}))]);
+    S.gemini = g; S.backup = b; S.memberNotes = mn;
   }
   S.loadedAt = Date.now();
 }
@@ -1393,11 +1590,11 @@ const Router = (() => {
     Shell.markActive(r);
     document.body.classList.remove('nav-open');
   }
-  const adminOnly = new Set(['bugun', 'tum', 'calisan', 'degerlendirme']);
+  const adminOnly = new Set(['bugun', 'tum', 'calisan', 'degerlendirme', 'calisanlar']);
   window.addEventListener('hashchange', render);
   return {
     def, render, parse,
-    mount(el) { main = el; render(); },
+    mount(el) { main = el; main.append = (...kids) => U.append(main, kids); render(); },
     unmount() { main = null; },
     refresh() { window.__keepScroll = true; Shell.update(); render(); },
     go(hash) { if (location.hash === hash) render(); else location.hash = hash; },
@@ -1449,16 +1646,20 @@ const Shell = (() => {
     if (isAdmin()) {
       const sent = S.employees.filter((e) => reportedToday(e.id)).length;
       items.push(navItem('#/bugun', 'Bugün', h('span', { class: 'nav-count', title: 'Bugün rapor gönderen' }, sent + '/' + S.employees.length)));
+      const openToday = S.employees.reduce((n, e) => { const st = Tasks.stats(e.id, 'gunluk', U.today()); return n + st.total - st.done; }, 0);
+      items.push(navItem('#/gorevler', 'Görevler', openToday ? h('span', { class: 'nav-count', title: 'Bugün açık günlük görev' }, openToday) : null));
       items.push(navItem('#/tum', 'Tüm raporlar'));
       items.push(navItem('#/ekip', 'Ekip notları'));
       items.push(navItem('#/degerlendirme', 'Değerlendirme'));
-      items.push(h('div', { class: 'nav-group' }, 'Çalışanlar'));
-      if (!S.employees.length) items.push(h('a', { class: 'nav-item muted', href: '#/ayarlar' }, 'Çalışan ekle'));
+      items.push(h('div', { class: 'nav-group' }, h('span', null, 'Çalışanlar'), h('a', { href: '#/calisanlar', class: 'nav-group-link', 'data-hash': '#/calisanlar' }, 'Düzenle')));
+      if (!S.employees.length) items.push(h('a', { class: 'nav-item muted', href: '#/calisanlar' }, 'Çalışan ekle'));
       S.employees.forEach((e) => items.push(h('a', { class: 'nav-item person', href: '#/calisan/' + e.id, 'data-hash': '#/calisan/' + e.id },
         avatar(e, 24), h('span', { class: 'nav-label' }, e.name),
         h('span', { class: 'today-dot' + (reportedToday(e.id) ? ' on' : ''), title: reportedToday(e.id) ? 'Bugün rapor gönderdi' : 'Bugün henüz rapor yok' }))));
     } else {
+      const mine = ['gunluk', 'haftalik', 'aylik'].reduce((n, p) => { const st = Tasks.stats(S.me.id, p, Tasks.keyOf(p, U.today())); return n + st.total - st.done; }, 0) + Tasks.overdue(S.me.id).length;
       items.push(navItem('#/raporlarim', 'Raporlarım'));
+      items.push(navItem('#/gorevler', 'Görevlerim', mine ? h('span', { class: 'nav-count', title: 'Açık görev' }, mine) : null));
       items.push(navItem('#/ekip', 'Ekip notları'));
     }
     U.clear(nav, items);
@@ -1509,6 +1710,7 @@ Router.def('bugun', (main) => {
     emps.length ? h('div', { class: 'who-today' },
       h('div', null, h('h2', { class: 'block-title' }, 'Gönderenler'), sent.length ? h('div', { class: 'people' }, sent.map((e) => personChip(e, reportsOf(e.id).filter((r) => r.date === t).length + ' rapor'))) : h('p', { class: 'muted' }, 'Henüz yok.')),
       h('div', null, h('h2', { class: 'block-title' }, 'Henüz göndermeyenler'), missing.length ? h('div', { class: 'people' }, missing.map((e) => personChip(e, lastSeen(e.id)))) : h('p', { class: 'muted' }, 'Herkes gönderdi.'))) : null,
+    emps.length && S.tasks.length ? section('Görev durumu', taskGrid(emps)) : null,
     emps.length ? section('Bu hafta', weekGrid(emps, days)) : null,
     section('Son raporlar', timeline(S.reports.filter((r) => r.member_id && memberById(r.member_id)), { limit: 12, emptyText: 'Henüz rapor yok. Çalışanlar giriş yapıp rapor yazdıkça burada görünecek.' }),
       S.reports.length > 12 ? h('a', { class: 'btn ghost', href: '#/tum' }, 'Tüm raporları gör') : null),
@@ -1522,6 +1724,18 @@ Router.def('bugun', (main) => {
     return r ? 'Son rapor: ' + U.relDay(r.date).toLocaleLowerCase('tr') + (U.relDay(r.date) === U.weekday(r.date) ? ', ' + U.shortDate(r.date) : '') : 'Hiç rapor yok';
   }
 });
+
+function taskGrid(emps) {
+  const { h } = U;
+  const t = U.today();
+  const cols = [['gunluk', 'Bugün'], ['haftalik', 'Bu hafta'], ['aylik', 'Bu ay']];
+  return h('div', { class: 'week-wrap' }, h('table', { class: 'week tgrid' },
+    h('thead', null, h('tr', null, h('th', { scope: 'col' }, h('span', { class: 'sr' }, 'Çalışan')), cols.map(([, l]) => h('th', { scope: 'col' }, l)), h('th', { scope: 'col' }, 'Geciken'))),
+    h('tbody', null, emps.map((e) => h('tr', null,
+      h('th', { scope: 'row' }, h('a', { href: '#/calisan/' + e.id, class: 'who' }, avatar(e, 22), e.name)),
+      cols.map(([p]) => { const st = Tasks.stats(e.id, p, Tasks.keyOf(p, t)); return h('td', null, st.total ? Tasks.progress(st.done, st.total) : h('span', { class: 'muted' }, '–')); }),
+      h('td', null, (() => { const n = Tasks.overdue(e.id).length; return n ? h('a', { class: 'late', href: '#/calisan/' + e.id }, n) : h('span', { class: 'muted' }, '–'); })()))))));
+}
 
 function weekGrid(emps, days) {
   const { h } = U;
@@ -1562,12 +1776,18 @@ function personPage(main, m, own) {
   renderChips(); renderList();
 
   const todayCount = all.filter((r) => r.date === U.today()).length;
+  const role = [m.title, m.department].filter(Boolean).join(', ');
   const sub = own
     ? (todayCount ? 'Bugün ' + todayCount + ' rapor yazdın.' : 'Bugün henüz rapor yazmadın.')
-    : (m.email + (m.user_id ? '' : ' (henüz hesap açmadı)'));
+    : [role, m.email + (m.user_id ? '' : ' (henüz hesap açmadı)'), m.phone].filter(Boolean).join('  |  ');
+  const hasTasks = S.tasks.some((t) => t.member_id === m.id);
+  const note = !own && isAdmin() && S.memberNotes[m.id];
   main.append(
     h('header', { class: 'page-head person-head', style: { '--who': m.color } }, avatar(m, 48),
-      h('div', null, h('h1', null, own ? 'Merhaba ' + m.name.split(' ')[0] : m.name), h('p', { class: 'sub' }, sub))),
+      h('div', { class: 'grow' }, h('h1', null, own ? 'Merhaba ' + m.name.split(' ')[0] : m.name), h('p', { class: 'sub' }, own && role ? role + '. ' + sub : sub)),
+      !own && isAdmin() ? h('div', { class: 'page-actions' }, U.btn('Görev ver', { variant: 'primary', onclick: () => Tasks.taskDialog(null, m.id) }), U.btn('Düzenle', { variant: 'ghost', onclick: () => memberDialog(m) })) : null),
+    note ? h('div', { class: 'private-note' }, h('strong', null, 'Özel not: '), note) : null,
+    hasTasks || !own ? section(own ? 'Görevlerin' : 'Görevler', Tasks.board([m.id], U.today(), { emptyAdd: false }), U.btn(own ? 'Tüm görevlerim ve geçmiş' : 'Görevler sayfasında aç', { variant: 'ghost', small: true, onclick: () => Tasks.open(own ? null : m.id) })) : null,
     section(own ? 'Yeni rapor' : m.name.split(' ')[0] + ' için rapor ekle', composer({ memberId: m.id, onDone: () => Router.refresh() })),
     section('Raporlar', chips, listBox),
   );
@@ -1691,7 +1911,7 @@ Router.def('degerlendirme', (main) => {
     U.clear(wOut, h('div', { class: 'thinking' }, 'Değerlendirme hazırlanıyor…'));
     await U.busy(wBtn, async () => {
       try {
-        const text = await geminiCall({ system: AI.WEEKLY_SYSTEM, text: 'DÖNEM: ' + label + '\n\nVERI (JSON):\n' + JSON.stringify({ calisanlar: data.calisanlar, ekip: data.ekip }), maxTokens: 16000 });
+        const text = await geminiCall({ system: AI.WEEKLY_SYSTEM, text: 'DÖNEM: ' + label + '\n\nVERI (JSON):\n' + JSON.stringify({ calisanlar: data.calisanlar, ekip: data.ekip, gorevler: data.gorevler }), maxTokens: 16000 });
         evalState.weekly = { text, title: 'Haftalık Ekip Değerlendirmesi, ' + label };
         U.clear(wOut, aiOutput(text, null, evalState.weekly.title));
       } catch (e) { U.clear(wOut, h('div', { class: 'notice err' }, e.message)); }
@@ -1739,6 +1959,247 @@ Router.def('degerlendirme', (main) => {
 
 </script>
 <script>
+// js/tasks.js
+// Görevler: günlük / haftalık / aylık, tek seferlik ya da tekrarlayan
+const Tasks = (() => {
+  const { h } = U;
+  const PERIODS = {
+    gunluk: { label: 'Günlük', every: 'Her gün', one: 'Tek seferlik', head: 'Günlük görevler' },
+    haftalik: { label: 'Haftalık', every: 'Her hafta', one: 'Tek seferlik', head: 'Haftalık görevler' },
+    aylik: { label: 'Aylık', every: 'Her ay', one: 'Tek seferlik', head: 'Aylık görevler' },
+  };
+
+  // Bir tarihin ait olduğu dönemin ilk günü
+  function keyOf(period, date) {
+    const d = U.parse(date);
+    if (period === 'haftalik') { const day = d.getDay(); d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day)); return U.iso(d); }
+    if (period === 'aylik') return date.slice(0, 8) + '01';
+    return date;
+  }
+  function shift(period, key, n) {
+    const d = U.parse(key);
+    if (period === 'haftalik') d.setDate(d.getDate() + 7 * n);
+    else if (period === 'aylik') d.setMonth(d.getMonth() + n);
+    else d.setDate(d.getDate() + n);
+    return U.iso(d);
+  }
+  function label(period, key) {
+    const d = U.parse(key);
+    if (period === 'aylik') return U.MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    if (period === 'haftalik') {
+      const e = U.parse(shift('gunluk', key, 6));
+      return d.getMonth() === e.getMonth() ? d.getDate() + '–' + e.getDate() + ' ' + U.MONTHS[d.getMonth()] : d.getDate() + ' ' + U.MONTHS[d.getMonth()] + ' – ' + e.getDate() + ' ' + U.MONTHS[e.getMonth()];
+    }
+    return d.getDate() + ' ' + U.MONTHS[d.getMonth()] + ', ' + U.weekday(key);
+  }
+  function relLabel(period, key) {
+    const now = keyOf(period, U.today());
+    const names = { gunluk: ['Bugün', 'Dün', 'Yarın'], haftalik: ['Bu hafta', 'Geçen hafta', 'Gelecek hafta'], aylik: ['Bu ay', 'Geçen ay', 'Gelecek ay'] }[period];
+    if (key === now) return names[0];
+    if (key === shift(period, now, -1)) return names[1];
+    if (key === shift(period, now, 1)) return names[2];
+    return null;
+  }
+  const applies = (t, period, key) => t.period === period && (t.recurring
+    ? keyOf(period, t.start_date) <= key && (!t.end_date || keyOf(period, t.end_date) >= key)
+    : keyOf(period, t.start_date) === key);
+  const checkOf = (t, key) => S.checks.find((c) => c.task_id === t.id && c.period_key === key);
+  const forMember = (memberId, period, key) => S.tasks.filter((t) => t.member_id === memberId && applies(t, period, key))
+    .sort((a, b) => (b.important - a.important) || a.created_at.localeCompare(b.created_at));
+  function stats(memberId, period, key) {
+    const list = forMember(memberId, period, key);
+    return { total: list.length, done: list.filter((t) => checkOf(t, key)).length };
+  }
+  // Süresi geçmiş, tamamlanmamış tek seferlik görevler (son 60 gün)
+  function overdue(memberId) {
+    const limit = shift('gunluk', U.today(), -60);
+    return S.tasks.filter((t) => t.member_id === memberId && !t.recurring && keyOf(t.period, t.start_date) < keyOf(t.period, U.today())
+      && keyOf(t.period, t.start_date) >= keyOf(t.period, limit) && !checkOf(t, keyOf(t.period, t.start_date)));
+  }
+  const canCheck = (t) => isAdmin() || (S.me && t.member_id === S.me.id);
+
+  async function toggle(t, key, done, note) {
+    const c = await API.setCheck(t.id, key, done, note || '');
+    S.checks = S.checks.filter((x) => !(x.task_id === t.id && x.period_key === key));
+    if (c) S.checks.push(c);
+  }
+
+  function noteDialog(t, key, cur) {
+    const ta = h('textarea', { class: 'input ta', rows: 3, placeholder: 'Örn: 12 mesaj yanıtlandı, 2 şikâyet iletildi.', 'aria-label': 'Not' });
+    ta.value = cur ? cur.note || '' : '';
+    const d = U.dialog('Not ekle: ' + t.title, h('div', { class: 'form' }, ta), { actions: [
+      U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }),
+      U.btn('Kaydet', { variant: 'primary', onclick: async (e) => { await U.busy(e.currentTarget, async () => { try { await toggle(t, key, true, ta.value.trim()); d.close(); U.toast('Not kaydedildi.'); Router.refresh(); } catch (err) { U.toast(err.message, 'err'); } }); } })] });
+    setTimeout(() => ta.focus(), 50);
+  }
+
+  // Tek görev satırı
+  function row(t, key, { showName = false, showPeriod = false } = {}) {
+    const m = memberById(t.member_id);
+    const c = checkOf(t, key);
+    const box = h('button', { class: 'tick' + (c ? ' on' : ''), role: 'checkbox', 'aria-checked': String(!!c), 'aria-label': (c ? 'Tamamlanmadı olarak işaretle: ' : 'Tamamlandı olarak işaretle: ') + t.title, disabled: !canCheck(t), onclick: async () => {
+      box.disabled = true;
+      try { await toggle(t, key, !c, c ? '' : ''); U.toast(c ? 'İşaret kaldırıldı.' : 'Görev tamamlandı.'); Router.refresh(); }
+      catch (e) { U.toast(e.message, 'err'); box.disabled = false; }
+    } }, h('span', { 'aria-hidden': 'true' }, '✓'));
+    const meta = [];
+    if (showName && m) meta.push(h('a', { class: 'who', href: '#/calisan/' + m.id }, avatar(m, 18), m.name));
+    meta.push(h('span', { class: 'badge p-' + t.period }, t.recurring ? PERIODS[t.period].every : (showPeriod ? (relLabel(t.period, key) || label(t.period, key)) : PERIODS[t.period].one)));
+    if (c) meta.push(h('span', { class: 'done-at' }, new Date(c.done_at).toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) + ' tamamlandı'));
+    return h('li', { class: 'task' + (c ? ' done' : '') + (t.important ? ' important' : ''), style: { '--who': (m && m.color) || '#8A93A3' } },
+      box,
+      h('div', { class: 'task-body' },
+        h('div', { class: 'task-title' }, t.important ? h('span', { class: 'star on static', title: 'Önemli' }, '★') : null, t.title),
+        t.description ? h('div', { class: 'task-desc' }, U.linkify(t.description)) : null,
+        c && c.note ? h('div', { class: 'task-note' }, h('strong', null, 'Not: '), c.note) : null,
+        h('div', { class: 'task-meta' }, meta)),
+      h('div', { class: 'task-actions' },
+        c && canCheck(t) ? h('button', { class: 'link-btn', onclick: () => noteDialog(t, key, c) }, c.note ? 'Notu düzenle' : 'Not ekle') : null,
+        isAdmin() ? h('button', { class: 'link-btn', onclick: () => taskDialog(t) }, 'Düzenle') : null,
+        isAdmin() ? h('button', { class: 'link-btn danger', onclick: async () => {
+          const msg = t.recurring ? 'Bu tekrarlayan görev ve geçmiş tüm tamamlama kayıtları silinecek. Sadece bundan sonrasını durdurmak için Düzenle\'den bitiş tarihi verebilirsin.' : 'Bu görev ve tamamlama kaydı silinecek.';
+          if (!(await U.confirm('Görev silinsin mi?', msg))) return;
+          try { await API.deleteTask(t.id); S.tasks = S.tasks.filter((x) => x.id !== t.id); S.checks = S.checks.filter((x) => x.task_id !== t.id); U.toast('Görev silindi.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+        } }, 'Sil') : null));
+  }
+
+  function progress(done, total) {
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    return h('span', { class: 'prog', title: done + ' / ' + total + ' tamamlandı' },
+      h('span', { class: 'prog-bar' }, h('span', { style: { width: pct + '%' } })), h('span', { class: 'prog-num' }, done + '/' + total));
+  }
+
+  // Seçilen tarihe göre günlük, haftalık ve aylık görev listeleri
+  function board(memberIds, date, { showName = false, emptyAdd = false, withOverdue = true, presetMember } = {}) {
+    const root = h('div', { class: 'task-board' });
+    const isToday = date === U.today();
+    if (withOverdue && isToday) {
+      const od = memberIds.flatMap((id) => overdue(id));
+      if (od.length) root.appendChild(h('section', { class: 'task-group overdue' },
+        h('header', null, h('h3', null, 'Geciken görevler'), h('span', { class: 'muted small' }, 'Dönemi geçti ama tamamlanmadı')),
+        h('ul', { class: 'tasks' }, od.map((t) => row(t, keyOf(t.period, t.start_date), { showName, showPeriod: true })))));
+    }
+    let any = false;
+    for (const period of ['gunluk', 'haftalik', 'aylik']) {
+      const key = keyOf(period, date);
+      const list = memberIds.flatMap((id) => forMember(id, period, key));
+      const done = list.filter((t) => checkOf(t, key)).length;
+      if (list.length) any = true;
+      root.appendChild(h('section', { class: 'task-group' },
+        h('header', null, h('h3', null, PERIODS[period].head), h('span', { class: 'muted small' }, (relLabel(period, key) ? relLabel(period, key) + ', ' : '') + label(period, key)), h('span', { class: 'grow' }), list.length ? progress(done, list.length) : null),
+        list.length ? h('ul', { class: 'tasks' }, list.map((t) => row(t, key, { showName }))) : h('p', { class: 'muted small task-empty' }, 'Bu dönem için görev yok.')));
+    }
+    if (!any && emptyAdd && isAdmin()) root.appendChild(h('div', { class: 'row' }, U.btn('Görev ekle', { variant: 'primary', onclick: () => taskDialog(null, presetMember) })));
+    return root;
+  }
+
+  // ---- görev ekle / düzenle ----
+  function taskDialog(t, presetMember) {
+    const editing = !!t;
+    const f = t ? { ...t } : { title: '', description: '', period: 'gunluk', recurring: false, start_date: U.today(), end_date: null, important: false };
+    const title = h('input', { class: 'input', id: 't-title', value: f.title, placeholder: 'Örn: Sosyal medya hesaplarını kontrol et', autocomplete: 'off' });
+    const desc = h('textarea', { class: 'input ta', id: 't-desc', rows: 3, placeholder: 'İsteğe bağlı: ayrıntılar, bağlantılar' }); desc.value = f.description || '';
+    const emps = S.employees;
+    const selected = new Set(t ? [t.member_id] : presetMember ? [presetMember] : []);
+    const people = h('div', { class: 'pick' });
+    const renderPeople = () => U.clear(people,
+      !editing && emps.length > 1 ? h('label', { class: 'pick-item all' }, h('input', { type: 'checkbox', checked: emps.every((e) => selected.has(e.id)), onchange: (e) => { emps.forEach((x) => (e.target.checked ? selected.add(x.id) : selected.delete(x.id))); renderPeople(); } }), h('strong', null, 'Tüm ekip')) : null,
+      emps.map((e) => h('label', { class: 'pick-item' }, h('input', { type: editing ? 'radio' : 'checkbox', name: 't-person', checked: selected.has(e.id), onchange: (ev) => { if (editing) selected.clear(); ev.target.checked ? selected.add(e.id) : selected.delete(e.id); if (!editing) renderPeople(); } }), avatar(e, 22), e.name)));
+    renderPeople();
+
+    const periodSeg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Dönem' });
+    const kindSeg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Tekrar' });
+    const whenBox = h('div', { class: 'field' });
+    let dateIn, endIn;
+    const renderWhen = () => {
+      U.clear(periodSeg, Object.entries(PERIODS).map(([k, p]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(f.period === k), class: 'seg-item' + (f.period === k ? ' on' : ''), onclick: () => { f.period = k; renderWhen(); } }, p.label)));
+      U.clear(kindSeg, [[false, 'Tek seferlik'], [true, 'Tekrarlayan']].map(([v, l]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(f.recurring === v), class: 'seg-item' + (f.recurring === v ? ' on' : ''), onclick: () => { f.recurring = v; renderWhen(); } }, l)));
+      const isMonth = f.period === 'aylik';
+      dateIn = h('input', { class: 'input date', id: 't-date', type: isMonth ? 'month' : 'date', value: isMonth ? f.start_date.slice(0, 7) : f.start_date, oninput: (e) => { f.start_date = isMonth ? e.target.value + '-01' : e.target.value; hint.textContent = hintText(); } });
+      endIn = h('input', { class: 'input date', id: 't-end', type: isMonth ? 'month' : 'date', value: f.end_date ? (isMonth ? f.end_date.slice(0, 7) : f.end_date) : '', oninput: (e) => { f.end_date = e.target.value ? (isMonth ? e.target.value + '-01' : e.target.value) : null; } });
+      const hint = h('small', null, hintText());
+      U.clear(whenBox,
+        h('label', { for: 't-date' }, f.recurring ? 'Başlangıç' : ({ gunluk: 'Hangi gün', haftalik: 'Hangi hafta (haftadan herhangi bir gün)', aylik: 'Hangi ay' })[f.period]),
+        h('div', { class: 'row' }, dateIn, f.recurring ? h('span', { class: 'muted' }, 'bitiş') : null, f.recurring ? endIn : null, f.recurring ? h('span', { class: 'muted small' }, '(boş bırakılırsa süresiz)') : null),
+        hint);
+    };
+    function hintText() {
+      if (!f.start_date) return '';
+      const key = keyOf(f.period, f.start_date);
+      return f.recurring ? PERIODS[f.period].every + ' yeniden açılır, ilk dönem: ' + label(f.period, key) + '.' : 'Dönem: ' + label(f.period, key) + '.';
+    }
+    renderWhen();
+    const imp = h('input', { type: 'checkbox', checked: f.important });
+    const msg = h('div', { class: 'form-msg' });
+    const saveBtn = U.btn(editing ? 'Kaydet' : 'Görevi ekle', { variant: 'primary', type: 'submit' });
+    const form = h('form', { class: 'form', onsubmit: async (e) => {
+      e.preventDefault(); msg.textContent = ''; msg.className = 'form-msg';
+      const err = (m) => { msg.textContent = m; msg.className = 'form-msg err'; };
+      if (!title.value.trim()) return err('Görev başlığını yaz.');
+      if (!selected.size) return err('Görevin kime verileceğini seç.');
+      if (!f.start_date) return err('Tarih seç.');
+      if (f.recurring && f.end_date && f.end_date < f.start_date) return err('Bitiş, başlangıçtan önce olamaz.');
+      const base = { title: title.value.trim(), description: desc.value.trim(), period: f.period, recurring: f.recurring,
+        start_date: f.recurring ? f.start_date : keyOf(f.period, f.start_date), end_date: f.recurring ? f.end_date : null, important: imp.checked };
+      await U.busy(saveBtn, async () => {
+        try {
+          if (editing) {
+            const s = await API.updateTask(t.id, { ...base, member_id: [...selected][0] });
+            S.tasks = S.tasks.map((x) => (x.id === s.id ? s : x));
+            U.toast('Görev güncellendi.');
+          } else {
+            const rows = await API.addTasks([...selected].map((id) => ({ ...base, member_id: id })));
+            S.tasks.push(...rows);
+            U.toast(rows.length > 1 ? rows.length + ' kişiye görev verildi.' : 'Görev eklendi.');
+          }
+          d.close(); Router.refresh();
+        } catch (ex) { err(ex.message); }
+      }, 'Kaydediliyor…');
+    } },
+      h('div', { class: 'field' }, h('label', { for: 't-title' }, 'Görev'), title),
+      h('div', { class: 'field' }, h('label', { for: 't-desc' }, 'Açıklama'), desc),
+      h('div', { class: 'field' }, h('span', { class: 'label' }, editing ? 'Kişi' : 'Kime'), emps.length ? people : h('p', { class: 'muted' }, 'Önce Çalışanlar sayfasından çalışan ekle.')),
+      h('div', { class: 'form two' }, h('div', { class: 'field' }, h('span', { class: 'label' }, 'Dönem'), periodSeg), h('div', { class: 'field' }, h('span', { class: 'label' }, 'Tekrar'), kindSeg)),
+      whenBox,
+      h('label', { class: 'check' }, imp, '★ Önemli görev'),
+      msg,
+      h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), saveBtn));
+    const d = U.dialog(editing ? 'Görevi düzenle' : 'Görev ver', form, { wide: true });
+    setTimeout(() => title.focus(), 50);
+  }
+
+  // ---- sayfa ----
+  const pageState = { date: null, member: '' };
+  function page(main) {
+    const admin = isAdmin();
+    const date = pageState.date || U.today();
+    const nav = h('div', { class: 'date-nav' },
+      h('button', { class: 'icon-btn', 'aria-label': 'Önceki gün', onclick: () => { pageState.date = shift('gunluk', date, -1); Router.render(); } }, '‹'),
+      h('input', { type: 'date', class: 'input date', value: date, 'aria-label': 'Tarih', onchange: (e) => { pageState.date = e.target.value || U.today(); Router.render(); } }),
+      h('button', { class: 'icon-btn', 'aria-label': 'Sonraki gün', onclick: () => { pageState.date = shift('gunluk', date, 1); Router.render(); } }, '›'),
+      date !== U.today() ? U.btn('Bugüne dön', { variant: 'ghost', small: true, onclick: () => { pageState.date = null; Router.render(); } }) : null);
+    let ids = admin ? S.employees.map((e) => e.id) : [S.me.id];
+    let filter = null;
+    if (admin) {
+      filter = h('select', { class: 'input', 'aria-label': 'Çalışan', onchange: (e) => { pageState.member = e.target.value; Router.render(); } },
+        h('option', { value: '' }, 'Tüm çalışanlar'), S.employees.map((e) => h('option', { value: e.id }, e.name)));
+      filter.value = pageState.member;
+      if (pageState.member && S.employees.some((e) => e.id === pageState.member)) ids = [pageState.member];
+    }
+    main.append(
+      pageHead(admin ? 'Görevler' : 'Görevlerim', admin ? 'Günlük, haftalık ve aylık görevler. Çalışanlar kendi görevlerini görüp tamamlandı olarak işaretler.' : 'Yöneticinin verdiği görevler. Bitirdiğinde kutuyu işaretle, istersen not ekle.',
+        admin ? U.btn('Görev ver', { variant: 'primary', onclick: () => taskDialog(null, pageState.member || null) }) : null),
+      h('div', { class: 'filter-bar' }, nav, filter),
+      board(ids, date, { showName: admin && ids.length > 1, emptyAdd: true, presetMember: pageState.member || null }));
+  }
+  Router.def('gorevler', page);
+  const open = (memberId) => { pageState.member = memberId || ''; pageState.date = null; Router.go('#/gorevler'); };
+
+  return { open, PERIODS, keyOf, shift, label, applies, checkOf, forMember, stats, overdue, row, board, progress, taskDialog };
+})();
+
+</script>
+<script>
 // js/settings.js
 // Ayarlar: ekip, yapay zekâ, yedekleme, görünüm, hesap
 const Theme = (() => {
@@ -1765,50 +2226,6 @@ function inviteText(m) {
     + '1. ' + (link || '[uygulama bağlantısı]') + ' adresini aç.\n'
     + '2. "Hesap oluştur"a tıkla ve ' + m.email + ' adresiyle kendi şifreni belirle.\n'
     + '3. Günlük raporlarını oradan yazabilirsin. Telefonda tarayıcı menüsünden "Ana ekrana ekle" dersen uygulama gibi açılır.';
-}
-
-function memberDialog(m) {
-  const { h } = U;
-  const isNew = !m;
-  m = m ? { ...m } : { name: '', email: '', role: 'employee', color: PALETTE[S.members.length % PALETTE.length], avatar: null, active: true };
-  const name = h('input', { class: 'input', value: m.name, required: true, autocomplete: 'off', id: 'm-name' });
-  const email = h('input', { class: 'input', type: 'email', value: m.email, required: true, autocomplete: 'off', id: 'm-email', disabled: !isNew && !!m.user_id && API.mode === 'remote' });
-  const role = h('select', { class: 'input', id: 'm-role' }, h('option', { value: 'employee' }, 'Çalışan: kendi raporlarını yazar ve görür'), h('option', { value: 'admin' }, 'Yönetici: her şeyi görür ve yönetir'));
-  role.value = m.role;
-  const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Renk' });
-  const renderSw = () => U.clear(sw, PALETTE.map((c) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(m.color === c), 'aria-label': c, class: 'swatch' + (m.color === c ? ' on' : ''), style: { background: c }, onclick: () => { m.color = c; renderSw(); renderAv(); } })),
-    h('label', { class: 'swatch custom', title: 'Başka renk' }, h('input', { type: 'color', value: m.color, oninput: (e) => { m.color = e.target.value; renderSw(); renderAv(); } }), '+'));
-  const avBox = h('div', { class: 'av-edit' });
-  const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async (e) => { const f = e.target.files[0]; if (f) { m.avatar = await U.avatarFromFile(f); renderAv(); } } });
-  const renderAv = () => U.clear(avBox, avatar({ ...m, name: name.value || m.name }, 56),
-    U.btn(m.avatar ? 'Fotoğrafı değiştir' : 'Fotoğraf ekle', { small: true, variant: 'ghost', onclick: () => fileIn.click() }),
-    m.avatar ? U.btn('Kaldır', { small: true, variant: 'ghost', onclick: () => { m.avatar = null; renderAv(); } }) : null, fileIn);
-  name.addEventListener('input', renderAv);
-  renderSw(); renderAv();
-  const msg = h('div', { class: 'form-msg' });
-  const field = (label, el, help) => h('div', { class: 'field' }, h('label', { for: el.id }, label), el, help ? h('small', null, help) : null);
-  const saveBtn = U.btn(isNew ? 'Ekle' : 'Kaydet', { variant: 'primary', type: 'submit' });
-  const form = h('form', { class: 'form', onsubmit: async (e) => {
-    e.preventDefault();
-    await U.busy(saveBtn, async () => {
-      try {
-        const saved = await API.saveMember({ ...m, name: name.value, email: email.value, role: role.value });
-        d.close();
-        await loadData();
-        U.toast(isNew ? saved.name + ' ekibe eklendi.' : 'Bilgiler kaydedildi.');
-        if (isNew) inviteDialog(saved); else Router.refresh();
-      } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
-    });
-  } },
-    avBox,
-    field('Ad soyad', name),
-    field('E-posta', email, isNew ? 'Kişi bu e-postayla hesap açacak.' : (m.user_id && API.mode === 'remote' ? 'Hesap açıldığı için e-posta değiştirilemez.' : null)),
-    field('Yetki', role),
-    h('div', { class: 'field' }, h('span', { class: 'label' }, 'Renk'), sw),
-    msg,
-    h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), saveBtn));
-  const d = U.dialog(isNew ? 'Kişi ekle' : m.name, form);
-  setTimeout(() => name.focus(), 50);
 }
 
 function inviteDialog(m) {
@@ -1848,27 +2265,8 @@ Router.def('ayarlar', (main) => {
   const { h } = U;
   main.append(pageHead('Ayarlar'));
 
-  // ---- ekip ----
   if (isAdmin()) {
-    const active = S.members.filter((m) => m.active).sort((a, b) => (a.role === b.role ? a.name.localeCompare(b.name, 'tr') : a.role === 'admin' ? -1 : 1));
-    const passive = S.members.filter((m) => !m.active);
-    const row = (m) => h('tr', { class: m.active ? '' : 'passive' },
-      h('td', null, h('div', { class: 'who' }, avatar(m, 30), h('div', null, h('strong', null, m.name), h('small', null, m.email)))),
-      h('td', null, m.role === 'admin' ? 'Yönetici' : 'Çalışan'),
-      h('td', null, !m.active ? h('span', { class: 'status off' }, 'Listeden çıkarıldı') : m.user_id ? h('span', { class: 'status ok' }, 'Hesap açtı') : h('span', { class: 'status wait' }, 'Davet bekliyor')),
-      h('td', { class: 'actions' },
-        m.active && !m.user_id ? U.btn('Davet', { small: true, variant: 'ghost', onclick: () => inviteDialog(m) }) : null,
-        U.btn('Düzenle', { small: true, variant: 'ghost', onclick: () => memberDialog(m) }),
-        m.id !== S.me.id ? U.btn(m.active ? 'Çıkar' : 'Geri al', { small: true, variant: 'ghost', onclick: async () => {
-          if (m.active && !(await U.confirm(m.name + ' listeden çıkarılsın mı?', 'Artık giriş yapamaz ve menüde görünmez. Geçmiş raporları silinmez; istediğin zaman geri alabilirsin.', 'Listeden çıkar'))) return;
-          try { await API.saveMember({ ...m, active: !m.active }); await loadData(); U.toast(m.active ? m.name + ' listeden çıkarıldı.' : m.name + ' geri alındı.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
-        } }) : null));
-    main.append(section('Ekip',
-      h('p', { class: 'muted' }, 'Eklediğin kişiler kendi e-postalarıyla hesap açıp giriş yapabilir. Çalışanlar yalnızca kendi raporlarını görür.'),
-      h('div', { class: 'table-wrap' }, h('table', { class: 'table' },
-        h('thead', null, h('tr', null, h('th', null, 'Kişi'), h('th', null, 'Yetki'), h('th', null, 'Durum'), h('th', null, h('span', { class: 'sr' }, 'İşlemler')))),
-        h('tbody', null, active.map(row), passive.map(row)))),
-      U.btn('Kişi ekle', { variant: 'primary', onclick: () => memberDialog(null) })));
+    main.append(section('Ekip', h('p', { class: 'muted' }, 'Çalışan ekleme, düzenleme, sıralama, şifre sıfırlama ve silme işlemleri Çalışanlar sayfasında.'), h('a', { class: 'btn ghost', href: '#/calisanlar' }, 'Çalışanlar sayfasını aç')));
 
     // ---- yapay zekâ ----
     const g = S.gemini || {};
@@ -1932,6 +2330,161 @@ Router.def('ayarlar', (main) => {
   main.append(section('Hesabım',
     h('div', { class: 'who big' }, avatar(S.me, 44), h('div', null, h('strong', null, S.me.name), h('small', null, S.me.email + ' (' + (isAdmin() ? 'yönetici' : 'çalışan') + ')'))),
     h('div', { class: 'row' }, U.btn('Şifremi değiştir', { variant: 'ghost', onclick: () => passwordDialog() }), U.btn('Çıkış yap', { variant: 'ghost', onclick: () => API.signOut() }))));
+});
+
+</script>
+<script>
+// js/members.js
+// Çalışanlar: ekleme, düzenleme, sıralama, şifre sıfırlama, listeden çıkarma ve silme (yalnızca yönetici)
+function memberDialog(m) {
+  const { h } = U;
+  const isNew = !m;
+  m = m ? { ...m } : { name: '', email: '', role: 'employee', color: PALETTE[S.members.length % PALETTE.length], avatar: null, active: true, title: '', department: '', phone: '', sort_order: S.employees.length + 1 };
+  const inp = (id, value, attrs = {}) => h('input', { class: 'input', id, value: value || '', autocomplete: 'off', ...attrs });
+  const name = inp('m-name', m.name, { required: true });
+  const title = inp('m-title', m.title, { placeholder: 'Örn: Grafik tasarımcı' });
+  const dept = inp('m-dept', m.department, { placeholder: 'Örn: Tasarım', list: 'm-dept-list' });
+  const depts = [...new Set(S.members.map((x) => x.department).filter(Boolean))];
+  const deptList = h('datalist', { id: 'm-dept-list' }, depts.map((d) => h('option', { value: d })));
+  const email = inp('m-email', m.email, { type: 'email', required: true });
+  const phone = inp('m-phone', m.phone, { type: 'tel', placeholder: '05xx xxx xx xx' });
+  const role = h('select', { class: 'input', id: 'm-role' }, h('option', { value: 'employee' }, 'Çalışan: kendi raporlarını ve görevlerini görür'), h('option', { value: 'admin' }, 'Yönetici: her şeyi görür ve yönetir'));
+  role.value = m.role;
+  const note = h('textarea', { class: 'input ta', id: 'm-note', rows: 3, placeholder: 'Sadece yöneticiler görür. Örn: izin günleri, hatırlatmalar.' });
+  note.value = (!isNew && S.memberNotes[m.id]) || '';
+  const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Renk' });
+  const renderSw = () => U.clear(sw, PALETTE.map((c) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(m.color === c), 'aria-label': c, class: 'swatch' + (m.color === c ? ' on' : ''), style: { background: c }, onclick: () => { m.color = c; renderSw(); renderAv(); } })),
+    h('label', { class: 'swatch custom', title: 'Başka renk' }, h('input', { type: 'color', value: m.color, oninput: (e) => { m.color = e.target.value; renderSw(); renderAv(); } }), '+'));
+  const avBox = h('div', { class: 'av-edit' });
+  const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async (e) => { const f = e.target.files[0]; if (f) { m.avatar = await U.avatarFromFile(f); renderAv(); } } });
+  const renderAv = () => U.clear(avBox, avatar({ ...m, name: name.value || m.name }, 56),
+    U.btn(m.avatar ? 'Fotoğrafı değiştir' : 'Fotoğraf ekle', { small: true, variant: 'ghost', onclick: () => fileIn.click() }),
+    m.avatar ? U.btn('Kaldır', { small: true, variant: 'ghost', onclick: () => { m.avatar = null; renderAv(); } }) : null, fileIn);
+  name.addEventListener('input', renderAv);
+  renderSw(); renderAv();
+  const msg = h('div', { class: 'form-msg' });
+  const field = (label, el, help) => h('div', { class: 'field' }, h('label', { for: el.id }, label), el, help ? h('small', null, help) : null);
+  const saveBtn = U.btn(isNew ? 'Ekle' : 'Kaydet', { variant: 'primary', type: 'submit' });
+  const isSelf = !isNew && m.id === S.me.id;
+
+  const danger = isNew ? null : h('div', { class: 'danger-zone' },
+    h('h3', null, 'Hesap işlemleri'),
+    h('div', { class: 'row' },
+      m.active && !m.user_id ? U.btn('Davet mesajı', { variant: 'ghost', small: true, onclick: () => { d.close(); inviteDialog(m); } }) : null,
+      m.user_id && !isSelf ? U.btn('Şifresini sıfırla', { variant: 'ghost', small: true, onclick: () => { d.close(); resetPasswordDialog(m); } }) : null,
+      !isSelf ? U.btn(m.active ? 'Listeden çıkar' : 'Listeye geri al', { variant: 'ghost', small: true, onclick: async () => { d.close(); await toggleActive(m); } }) : null,
+      !isSelf ? U.btn('Tamamen sil', { variant: 'ghost', small: true, onclick: () => { d.close(); deleteMemberFlow(m); } }) : null),
+    isSelf ? h('p', { class: 'muted small' }, 'Kendi şifreni Ayarlar > Hesabım bölümünden değiştirebilirsin.') : null);
+
+  const form = h('form', { class: 'form', onsubmit: async (e) => {
+    e.preventDefault();
+    msg.textContent = ''; msg.className = 'form-msg';
+    if (!name.value.trim()) { msg.textContent = 'Ad soyad boş olamaz.'; msg.className = 'form-msg err'; return; }
+    await U.busy(saveBtn, async () => {
+      try {
+        const saved = await API.saveMember({ ...m, name: name.value.trim(), email: email.value, role: role.value, title: title.value.trim(), department: dept.value.trim(), phone: phone.value.trim() });
+        const n = note.value.trim();
+        if (n !== ((S.memberNotes[saved.id]) || '')) await API.saveMemberNote(saved.id, n);
+        d.close();
+        await loadData();
+        U.toast(isNew ? saved.name + ' ekibe eklendi.' : 'Bilgiler kaydedildi.');
+        if (isNew) inviteDialog(saved); else Router.refresh();
+      } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+    });
+  } },
+    avBox,
+    h('div', { class: 'form two' }, field('Ad soyad', name), field('Unvan', title)),
+    h('div', { class: 'form two' }, field('Departman', dept), deptList, field('Telefon', phone)),
+    field('E-posta', email, isNew ? 'Kişi bu e-postayla hesap açacak.' : (m.user_id ? 'Değiştirirsen kişi artık yeni e-postayla giriş yapar.' : null)),
+    h('div', { class: 'form two' }, field('Yetki', role), h('div', { class: 'field' }, h('span', { class: 'label' }, 'Renk'), sw)),
+    field('Özel not', note, 'Çalışan bu notu göremez.'),
+    msg,
+    h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), saveBtn),
+    danger);
+  const d = U.dialog(isNew ? 'Çalışan ekle' : m.name, form, { wide: true });
+  setTimeout(() => name.focus(), 50);
+}
+
+async function toggleActive(m) {
+  if (m.active && !(await U.confirm(m.name + ' listeden çıkarılsın mı?', 'Artık giriş yapamaz, menüde görünmez ve görev alamaz. Raporları ve görevleri silinmez; istediğin zaman geri alabilirsin.', 'Listeden çıkar'))) return;
+  try { await API.saveMember({ ...m, active: !m.active }); await loadData(); U.toast(m.active ? m.name + ' listeden çıkarıldı.' : m.name + ' listeye geri alındı.'); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+}
+
+function resetPasswordDialog(m) {
+  const { h } = U;
+  const gen = () => { const c = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; const a = crypto.getRandomValues(new Uint32Array(8)); a.forEach((x) => { s += c[x % c.length]; }); return s; };
+  const pw = h('input', { class: 'input', id: 'rp-pw', type: 'text', autocomplete: 'off', value: gen(), minlength: 6 });
+  const msg = h('div', { class: 'form-msg' });
+  const b = U.btn('Şifreyi değiştir', { variant: 'primary', type: 'submit' });
+  const d = U.dialog(m.name + ' için yeni şifre', h('form', { class: 'form', onsubmit: async (e) => {
+    e.preventDefault();
+    await U.busy(b, async () => {
+      try {
+        await API.setPassword(m.id, pw.value);
+        const text = 'Rapor defteri şifren yenilendi.\nE-posta: ' + m.email + '\nYeni şifre: ' + pw.value + '\nGiriş yaptıktan sonra Ayarlar > Hesabım bölümünden kendi şifreni belirleyebilirsin.';
+        U.clear(d.dlg.querySelector('.dlg-body'), h('p', null, 'Şifre değiştirildi. Bu mesajı ' + m.name.split(' ')[0] + '\'e ilet:'), h('pre', { class: 'invite' }, text),
+          h('div', { class: 'dlg-foot inline' }, U.btn('Kapat', { variant: 'ghost', onclick: () => d.close() }),
+            U.btn('Mesajı kopyala', { variant: 'primary', onclick: async () => { try { await navigator.clipboard.writeText(text); U.toast('Kopyalandı.'); } catch { U.toast('Kopyalanamadı. Metni seçip Ctrl+C ile kopyala.', 'err'); } } })));
+      } catch (err) { msg.textContent = err.message; msg.className = 'form-msg err'; }
+    });
+  } },
+    h('p', null, m.name.split(' ')[0] + ' şifresini unuttuysa buradan yeni bir şifre ver. Eski şifresi artık çalışmaz.'),
+    h('div', { class: 'field' }, h('label', { for: 'rp-pw' }, 'Yeni şifre'), h('div', { class: 'row' }, pw, U.btn('Yeni öneri', { variant: 'ghost', small: true, onclick: () => { pw.value = gen(); } })), h('small', null, 'En az 6 karakter. Önerilen şifreyi kullanabilir ya da kendin yazabilirsin.')),
+    msg, h('div', { class: 'dlg-foot inline' }, U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), b)));
+}
+
+async function deleteMemberFlow(m) {
+  const { h } = U;
+  const reps = S.reports.filter((r) => r.member_id === m.id).length;
+  const tasks = S.tasks.filter((t) => t.member_id === m.id).length;
+  const conf = h('input', { class: 'input', id: 'del-conf', autocomplete: 'off', placeholder: m.name });
+  const msg = h('div', { class: 'form-msg' });
+  const b = U.btn('Kalıcı olarak sil', { variant: 'danger' });
+  const d = U.dialog(m.name + ' silinsin mi?', h('div', { class: 'form' },
+    h('p', null, 'Bu işlem geri alınamaz. Silinecekler: ' + reps + ' rapor (görselleriyle), ' + tasks + ' görev, giriş hesabı ve özel notlar.'),
+    h('p', { class: 'muted' }, 'Kişiyi sadece geçici olarak durdurmak istiyorsan "Listeden çıkar" seçeneğini kullan; o zaman geçmişi korunur.'),
+    h('div', { class: 'field' }, h('label', { for: 'del-conf' }, 'Onaylamak için adını yaz: ' + m.name), conf), msg), {
+    actions: [U.btn('Vazgeç', { variant: 'ghost', onclick: () => d.close() }), b] });
+  b.addEventListener('click', async () => {
+    if (U.norm(conf.value) !== U.norm(m.name)) { msg.textContent = 'Ad eşleşmiyor.'; msg.className = 'form-msg err'; conf.focus(); return; }
+    await U.busy(b, async () => {
+      try { await API.deleteMember(m); d.close(); await loadData(); U.toast(m.name + ' silindi.'); Router.go('#/calisanlar'); }
+      catch (e) { msg.textContent = e.message; msg.className = 'form-msg err'; }
+    }, 'Siliniyor…');
+  });
+}
+
+Router.def('calisanlar', (main) => {
+  const { h } = U;
+  if (!isAdmin()) { Router.go('#/'); return; }
+  const emps = S.members.filter((m) => m.role === 'employee' && m.active).sort(byOrder);
+  const admins = S.members.filter((m) => m.role === 'admin' && m.active).sort(byOrder);
+  const passive = S.members.filter((m) => !m.active).sort(byOrder);
+  const move = async (i, dir) => {
+    const list = emps.slice(); const j = i + dir; if (j < 0 || j >= list.length) return;
+    [list[i], list[j]] = [list[j], list[i]];
+    try { await API.setOrder(list.map((m, k) => ({ id: m.id, sort_order: k + 1 }))); await loadData(); Router.refresh(); } catch (e) { U.toast(e.message, 'err'); }
+  };
+  const status = (m) => !m.active ? h('span', { class: 'status off' }, 'Listeden çıkarıldı') : m.user_id ? h('span', { class: 'status ok' }, 'Hesap açtı') : h('span', { class: 'status wait' }, 'Davet bekliyor');
+  const card = (m, i, sortable) => h('article', { class: 'mcard' + (m.active ? '' : ' passive'), style: { '--who': m.color } },
+    sortable ? h('div', { class: 'order' },
+      h('button', { class: 'icon-btn', 'aria-label': m.name + ' yukarı taşı', disabled: i === 0, onclick: () => move(i, -1) }, '↑'),
+      h('button', { class: 'icon-btn', 'aria-label': m.name + ' aşağı taşı', disabled: i === emps.length - 1, onclick: () => move(i, 1) }, '↓')) : null,
+    avatar(m, 44),
+    h('div', { class: 'mcard-main' },
+      h('div', { class: 'mcard-name' }, m.active && m.role === 'employee' ? h('a', { href: '#/calisan/' + m.id }, m.name) : h('strong', null, m.name), status(m)),
+      h('div', { class: 'mcard-sub' }, [m.title, m.department].filter(Boolean).join(', ') || h('span', { class: 'muted' }, 'Unvan girilmemiş')),
+      h('div', { class: 'mcard-contact' }, m.email, m.phone ? '  |  ' + m.phone : ''),
+      S.memberNotes[m.id] ? h('div', { class: 'mcard-note' }, S.memberNotes[m.id]) : null),
+    h('div', { class: 'mcard-actions' },
+      m.active && !m.user_id ? U.btn('Davet', { small: true, variant: 'ghost', onclick: () => inviteDialog(m) }) : null,
+      m.active && m.role === 'employee' ? U.btn('Görev ver', { small: true, variant: 'ghost', onclick: () => Tasks.taskDialog(null, m.id) }) : null,
+      U.btn('Düzenle', { small: true, variant: 'primary', onclick: () => memberDialog(m) })));
+  main.append(
+    pageHead('Çalışanlar', 'Ekle, düzenle, sırala. Menüdeki sıra buradaki sıradır.', U.btn('Çalışan ekle', { variant: 'primary', onclick: () => memberDialog(null) })),
+    section('Çalışanlar (' + emps.length + ')', emps.length ? h('div', { class: 'mcards' }, emps.map((m, i) => card(m, i, true))) : h('div', { class: 'empty' }, 'Henüz çalışan yok. "Çalışan ekle" ile başla.')),
+    section('Yöneticiler', h('div', { class: 'mcards' }, admins.map((m) => card(m, 0, false)))),
+    passive.length ? section('Listeden çıkarılanlar', h('p', { class: 'muted' }, 'Giriş yapamazlar; raporları ve görevleri saklanıyor. Düzenle\'den geri alabilir ya da tamamen silebilirsin.'), h('div', { class: 'mcards' }, passive.map((m) => card(m, 0, false)))) : null);
 });
 
 </script>
@@ -2094,7 +2647,7 @@ const Assistant = (() => {
     if (starting) return; starting = true;
     try {
       Assistant.unmount(); Router.unmount();
-      if (!API.session()) { S.me = null; login(); return; }
+      if (!API.session()) { S.me = null; if (location.hash) history.replaceState(null, '', location.pathname + location.search); login(); return; }
       loading();
       const me = await API.me();
       if (!me) { noAccess(); return; }
