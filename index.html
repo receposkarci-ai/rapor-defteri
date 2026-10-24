@@ -2217,6 +2217,8 @@ const Theme = (() => {
 })();
 
 function appLink() {
+  const cfg = (window.RD_CONFIG && window.RD_CONFIG.appUrl) || '';
+  if (cfg) return cfg;
   return /^https?:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname) ? location.origin + location.pathname : '';
 }
 
@@ -2225,7 +2227,7 @@ function inviteText(m) {
   return 'Merhaba ' + m.name.split(' ')[0] + ', rapor defterine erişimin açıldı.\n\n'
     + '1. ' + (link || '[uygulama bağlantısı]') + ' adresini aç.\n'
     + '2. "Hesap oluştur"a tıkla ve ' + m.email + ' adresiyle kendi şifreni belirle.\n'
-    + '3. Günlük raporlarını oradan yazabilirsin. Telefonda tarayıcı menüsünden "Ana ekrana ekle" dersen uygulama gibi açılır.';
+    + '3. Görevlerini oradan görüp işaretleyebilir, günlük raporlarını yazabilirsin. Telefonda tarayıcı menüsünden "Ana ekrana ekle" dersen uygulama gibi açılır.';
 }
 
 function inviteDialog(m) {
@@ -2235,7 +2237,7 @@ function inviteDialog(m) {
   const d = U.dialog(m.name + ' için davet', h('div', null,
     h('p', null, 'Bu mesajı WhatsApp ya da e-postayla gönder. ' + m.name.split(' ')[0] + ' bağlantıyı açıp kendi şifresini belirleyecek.'),
     pre,
-    appLink() ? null : h('p', { class: 'muted' }, 'Uygulamayı yayınladığın adresten açtığında bağlantı mesaja kendiliğinden eklenir.')), {
+    appLink() ? null : h('p', { class: 'muted' }, 'Uygulama adresi ayarlanmamış. config.js dosyasındaki appUrl satırına sitenin adresini yaz.')), {
     actions: [U.btn('Kapat', { variant: 'ghost', onclick: () => d.close() }),
       U.btn('Mesajı kopyala', { variant: 'primary', onclick: async () => { try { await navigator.clipboard.writeText(text); U.toast('Davet mesajı kopyalandı.'); } catch { U.toast('Kopyalanamadı. Metni seçip Ctrl+C ile kopyala.', 'err'); } } })],
     onClose: () => Router.refresh(),
@@ -2421,7 +2423,7 @@ function resetPasswordDialog(m) {
     await U.busy(b, async () => {
       try {
         await API.setPassword(m.id, pw.value);
-        const text = 'Rapor defteri şifren yenilendi.\nE-posta: ' + m.email + '\nYeni şifre: ' + pw.value + '\nGiriş yaptıktan sonra Ayarlar > Hesabım bölümünden kendi şifreni belirleyebilirsin.';
+        const text = 'Rapor defteri şifren yenilendi.\n' + (appLink() ? 'Adres: ' + appLink() + '\n' : '') + 'E-posta: ' + m.email + '\nYeni şifre: ' + pw.value + '\nGiriş yaptıktan sonra Ayarlar > Hesabım bölümünden kendi şifreni belirleyebilirsin.';
         U.clear(d.dlg.querySelector('.dlg-body'), h('p', null, 'Şifre değiştirildi. Bu mesajı ' + m.name.split(' ')[0] + '\'e ilet:'), h('pre', { class: 'invite' }, text),
           h('div', { class: 'dlg-foot inline' }, U.btn('Kapat', { variant: 'ghost', onclick: () => d.close() }),
             U.btn('Mesajı kopyala', { variant: 'primary', onclick: async () => { try { await navigator.clipboard.writeText(text); U.toast('Kopyalandı.'); } catch { U.toast('Kopyalanamadı. Metni seçip Ctrl+C ile kopyala.', 'err'); } } })));
