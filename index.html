@@ -1028,10 +1028,42 @@ const RemoteAPI = (cfg) => {
 const AI = (() => {
   const DEFAULT_MODEL = 'gemini-flash-latest';
 
-  async function call({ apiKey, model, system, text, images = [], maxTokens = 8192, json = false }) {
+  // Yoğunluk/geçici hatalarda önce aynı modeli yeniden dener, sonra yedek modellere geçer
+  const FALLBACKS = ['gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.5-flash'];
+  const TRANSIENT = new Set([429, 500, 502, 503, 504]);
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  class GeminiError extends Error { constructor(msg, { transient = false, notFound = false } = {}) { super(msg); this.transient = transient; this.notFound = notFound; } }
+
+  async function once({ apiKey, model, body }) {
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
+    let res;
+    try {
+      res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body) });
+    } catch (e) { throw new GeminiError('Gemini\'ye ulaşılamadı. İnternet bağlantını kontrol et.', { transient: true }); }
+    let data = null;
+    try { data = await res.json(); } catch { /* boş yanıt */ }
+    if (!res.ok || (data && data.error)) {
+      const msg = (data && data.error && data.error.message) || ('HTTP ' + res.status);
+      const status = res.ok ? (data.error.code || 500) : res.status;
+      if (status === 404) throw new GeminiError('"' + model + '" modeli bulunamadı.', { notFound: true });
+      if (status === 400 && /API key/i.test(msg)) throw new GeminiError('Gemini API anahtarı geçersiz. Ayarlar > Yapay zekâ bölümünden kontrol et.');
+      if (status === 429 && /quota|exhausted|limit/i.test(msg) && !/high demand|overloaded/i.test(msg)) throw new GeminiError('Gemini\'nin ücretsiz kullanım sınırı doldu. Biraz bekleyip tekrar dene.', { transient: true });
+      if (TRANSIENT.has(status) || /high demand|overloaded|unavailable|try again/i.test(msg)) throw new GeminiError('Gemini şu an çok yoğun.', { transient: true });
+      throw new GeminiError('Gemini hatası: ' + msg);
+    }
+    const cand = data && data.candidates && data.candidates[0];
+    const out = cand && cand.content && cand.content.parts ? cand.content.parts.filter((p) => !p.thought).map((p) => p.text || '').join('\n').trim() : '';
+    if (!out) {
+      if (cand && cand.finishReason === 'MAX_TOKENS') throw new GeminiError('Yanıt çok uzun oldu ve kesildi. Tarih aralığını daraltıp tekrar dene.');
+      if (cand && cand.finishReason === 'SAFETY') throw new GeminiError('Gemini bu isteğe yanıt vermedi (güvenlik filtresi).');
+      throw new GeminiError('Gemini boş yanıt döndürdü.', { transient: true });
+    }
+    return out;
+  }
+
+  async function call({ apiKey, model, system, text, images = [], maxTokens = 8192, json = false, onRetry }) {
     if (!apiKey) throw new Error('Gemini API anahtarı girilmemiş. Ayarlar > Yapay zekâ bölümünden ekle.');
-    const m = (model || DEFAULT_MODEL).trim();
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent';
     const parts = [{ text }];
     images.forEach((img) => parts.push({ inline_data: { mime_type: img.mimeType, data: img.data } }));
     const body = {
@@ -1039,27 +1071,24 @@ const AI = (() => {
       contents: [{ role: 'user', parts }],
       generationConfig: { maxOutputTokens: maxTokens, ...(json ? { responseMimeType: 'application/json' } : {}) },
     };
-    let res;
-    try {
-      res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body) });
-    } catch (e) { throw new Error('Gemini\'ye ulaşılamadı. İnternet bağlantını kontrol et.'); }
-    let data = null;
-    try { data = await res.json(); } catch { /* boş yanıt */ }
-    if (!res.ok || (data && data.error)) {
-      const msg = (data && data.error && data.error.message) || ('HTTP ' + res.status);
-      if (res.status === 404) throw new Error('"' + m + '" modeli bulunamadı. Ayarlar > Yapay zekâ bölümünden model adını değiştir (önerilen: ' + DEFAULT_MODEL + ').');
-      if (res.status === 400 && /API key/i.test(msg)) throw new Error('Gemini API anahtarı geçersiz. Ayarlar > Yapay zekâ bölümünden kontrol et.');
-      if (res.status === 429) throw new Error('Gemini\'nin ücretsiz kullanım sınırı doldu. Biraz bekleyip tekrar dene.');
-      throw new Error('Gemini hatası: ' + msg);
+    const first = (model || DEFAULT_MODEL).trim();
+    const models = [first, ...FALLBACKS.filter((m) => m !== first)];
+    let last = null;
+    for (let mi = 0; mi < models.length; mi++) {
+      const tries = mi === 0 ? 3 : 2;
+      for (let t = 0; t < tries; t++) {
+        try { return await once({ apiKey, model: models[mi], body }); }
+        catch (e) {
+          last = e;
+          if (e.notFound) break;            // bu model yok: sıradakine geç
+          if (!e.transient) throw e;        // kalıcı hata: hemen bildir
+          if (t < tries - 1) { onRetry && onRetry(models[mi], t + 1); await wait(1500 * Math.pow(2, t) + Math.random() * 500); }
+        }
+      }
+      if (mi < models.length - 1) onRetry && onRetry(models[mi + 1], 0);
     }
-    const cand = data && data.candidates && data.candidates[0];
-    const out = cand && cand.content && cand.content.parts ? cand.content.parts.filter((p) => !p.thought).map((p) => p.text || '').join('\n').trim() : '';
-    if (!out) {
-      if (cand && cand.finishReason === 'MAX_TOKENS') throw new Error('Yanıt çok uzun oldu ve kesildi. Tarih aralığını daraltıp tekrar dene.');
-      if (cand && cand.finishReason === 'SAFETY') throw new Error('Gemini bu isteğe yanıt vermedi (güvenlik filtresi).');
-      throw new Error('Gemini boş yanıt döndürdü. Tekrar dene.');
-    }
-    return out;
+    if (last && last.notFound) throw new Error('Gemini modeli bulunamadı. Ayarlar > Yapay zekâ bölümünde model adını "' + DEFAULT_MODEL + '" yap.');
+    throw new Error((last ? last.message + ' ' : '') + 'Birkaç kez ve yedek modellerle denendi ama yanıt alınamadı. Birkaç dakika sonra tekrar dene.');
   }
 
   const inRange = (d, from, to) => (!from || d >= from) && (!to || d <= to);
@@ -1563,7 +1592,10 @@ function aiOutput(text, idToPath, title) {
 
 async function geminiCall(opts) {
   const g = S.gemini || {};
-  return AI.call({ apiKey: g.apiKey, model: g.model, ...opts });
+  const onRetry = (model, n) => {
+    document.querySelectorAll('.thinking').forEach((el) => { el.textContent = n ? 'Gemini yoğun, yeniden deneniyor (' + (n + 1) + '. deneme)…' : 'Gemini yoğun, yedek modelle deneniyor (' + model + ')…'; });
+  };
+  return AI.call({ apiKey: g.apiKey, model: g.model, onRetry, ...opts });
 }
 
 </script>
